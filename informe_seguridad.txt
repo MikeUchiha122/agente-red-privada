@@ -1,0 +1,197 @@
+
+=================================================================
+[INFORME] INFORME DE SEGURIDAD
+=================================================================
+
+[INFO] RESUMEN: [OK] SEGURO
+IP: 192.168.0.1
+Tipo: Unknown
+Sistema: Desconocido
+MAC: EC:A9:40:7C:27:3D
+
+[PUERTO] PUERTOS (3):
+  - Puerto 22
+  - Puerto 80
+  - Puerto 443
+[CUIDADO] AMENAZAS:
+  [WEB] Web: Pagina web
+  [SSH] SSH: Acceso remoto seguro
+
+=================================================================
+Generado: 2026-03-13 23:45:10.587486
+
+=================================================================
+[INFORME] INFORME DE SEGURIDAD
+=================================================================
+
+[INFO] RESUMEN: [OK] SEGURO
+IP: 192.168.0.13
+Tipo: Unknown
+Sistema: Desconocido
+MAC: AA:4C:12:A0:31:15
+
+[PUERTO] PUERTOS (1):
+  - Puerto 49152
+[OK] Sin amenazas detectadas
+
+=================================================================
+Generado: 2026-03-13 23:45:10.587541
+
+=================================================================
+[INFORME] INFORME DE SEGURIDAD
+=================================================================
+
+[INFO] RESUMEN: [OK] SEGURO
+IP: 192.168.0.14
+Tipo: Unknown
+Sistema: Desconocido
+MAC: 76:AF:8C:AE:FC:EA
+
+[PUERTO] PUERTOS (0):
+
+[OK] Sin amenazas detectadas
+
+=================================================================
+Generado: 2026-03-13 23:45:10.587555
+
+=================================================================
+[INFORME] INFORME DE SEGURIDAD
+=================================================================
+
+[INFO] RESUMEN: [OK] SEGURO
+IP: 192.168.0.2
+Tipo: Unknown
+Sistema: Desconocido
+MAC: 1A:5B:9D:D6:B1:AB
+
+[PUERTO] PUERTOS (1):
+  - Puerto 49152
+[OK] Sin amenazas detectadas
+
+=================================================================
+Generado: 2026-03-13 23:45:10.587567
+
+=================================================================
+[INFORME] INFORME DE SEGURIDAD
+=================================================================
+
+[INFO] RESUMEN: [OK] SEGURO
+IP: 192.168.0.253
+Tipo: Unknown
+Sistema: Desconocido
+MAC: 00:00:CA:01:02:03
+
+[PUERTO] PUERTOS (0):
+
+[OK] Sin amenazas detectadas
+
+=================================================================
+Generado: 2026-03-13 23:45:10.587575
+
+=================================================================
+[INFORME] INFORME DE SEGURIDAD
+=================================================================
+
+[INFO] RESUMEN: [CUIDADO] CUIDADO
+IP: 192.168.0.4
+Tipo: Unknown
+Sistema: Desconocido
+MAC: 
+
+[PUERTO] PUERTOS (3):
+  - Puerto 135
+  - Puerto 139
+  - Puerto 445
+[CUIDADO] AMENAZAS:
+  [SMB] SMB: Carpetas compartidas
+
+=================================================================
+Generado: 2026-03-13 23:45:10.587590
+
+=================================================================
+[INFORME] INFORME DE SEGURIDAD
+=================================================================
+
+[INFO] RESUMEN: [CUIDADO] CUIDADO
+IP: 192.168.0.5
+Tipo: Unknown
+Sistema: Desconocido
+MAC: 98:22:6E:13:C6:D0
+
+[PUERTO] PUERTOS (1):
+  - Puerto 8888
+[CUIDADO] AMENAZAS:
+  [MINERO] Mineros: Software de mineria ilegal
+
+=================================================================
+Generado: 2026-03-13 23:45:10.587602
+
+=================================================================
+[INFORME] INFORME DE SEGURIDAD
+=================================================================
+
+[INFO] RESUMEN: [OK] SEGURO
+IP: 192.168.0.6
+Tipo: Unknown
+Sistema: Desconocido
+MAC: A0:92:08:36:4F:CE
+
+[PUERTO] PUERTOS (0):
+
+[OK] Sin amenazas detectadas
+
+=================================================================
+Generado: 2026-03-13 23:45:10.587610
+
+=================================================================
+[INFORME] INFORME DE SEGURIDAD
+=================================================================
+
+[INFO] RESUMEN: [OK] SEGURO
+IP: 192.168.0.7
+Tipo: Unknown
+Sistema: Desconocido
+MAC: 7C:2E:BD:0D:05:D4
+
+[PUERTO] PUERTOS (3):
+  - Puerto 8008
+  - Puerto 8009
+  - Puerto 8443
+[OK] Sin amenazas detectadas
+
+=================================================================
+Generado: 2026-03-13 23:45:10.587620
+
+=================================================================
+[INFORME] INFORME DE SEGURIDAD
+=================================================================
+
+[INFO] RESUMEN: [OK] SEGURO
+IP: 192.168.0.8
+Tipo: Unknown
+Sistema: Desconocido
+MAC: D8:D6:68:C6:F5:F3
+
+[PUERTO] PUERTOS (0):
+
+[OK] Sin amenazas detectadas
+
+=================================================================
+Generado: 2026-03-13 23:45:10.587628
+
+=================================================================
+[INFORME] INFORME DE SEGURIDAD
+=================================================================
+
+[INFO] RESUMEN: [OK] SEGURO
+IP: 192.168.0.9
+Tipo: Unknown
+Sistema: Desconocido
+MAC: A0:92:08:AA:30:D3
+
+[PUERTO] PUERTOS (0):
+
+[OK] Sin amenazas detectadas
+
+=================================================================
+Generado: 2026-03-13 23:45:10.587634

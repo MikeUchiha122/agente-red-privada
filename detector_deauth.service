@@ -1,0 +1,18 @@
+[Unit]
+Description=Detector Deauth WiFi - Monitor de Seguridad
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root
+ExecStart=/usr/bin/python3 /root/detector_deauth.py
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=append:/var/log/deteccion_deauth.log
+StandardError=append:/var/log/deteccion_deauth.log
+
+[Install]
+WantedBy=multi-user.target

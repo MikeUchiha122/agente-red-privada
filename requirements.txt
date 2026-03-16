@@ -1,0 +1,5 @@
+# Dependencias del proyecto
+python-nmap
+scapy          # Para capturar paquetes Deauth
+twilio         # Para enviar WhatsApp
+requests       # Para HTTP
