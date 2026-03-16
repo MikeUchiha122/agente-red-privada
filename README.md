@@ -96,9 +96,23 @@ cd agente-red-privada
 
 ### Paso 2: Instalar dependencias
 
-**Opcional - Solo si tienes NMAP instalado:**
+**Opción A: Entorno virtual (Recomendado - Kali Linux, Ubuntu 23.04+, etc.)**
+
 ```bash
-pip install python-nmap requests
+# Crear entorno virtual
+python3 -m venv venv
+
+# Activar entorno virtual
+source venv/bin/activate
+
+# Instalar dependencias
+pip install nmap requests
+```
+
+**Opción B: Installation directa (Windows, macOS, older Linux)**
+
+```bash
+pip install nmap requests
 ```
 
 **Para usar detector Deauth (Linux/Raspberry Pi):**
@@ -106,16 +120,25 @@ pip install python-nmap requests
 pip install scapy requests twilio
 ```
 
+**Nota:** En Kali Linux 2024+ usa la Opción A debido a PEP 668.
+
 ### Paso 3: ¡Listo! Ejecutar el programa
 
-**Windows:**
+**Con entorno virtual activado (Kali Linux, etc.):**
 ```bash
 python agente_red.py
 ```
 
-**Linux/Mac:**
+**Sin entorno virtual (Windows, macOS):**
 ```bash
+python agente_red.py
+# o
 python3 agente_red.py
+```
+
+**Para salir del entorno virtual cuando termines:**
+```bash
+deactivate
 ```
 
 ---
