@@ -788,6 +788,7 @@ Generado: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 10. Salir
 ================================================================================
 """)
+        print("Selecciona una opcion (1-10): ", end="")
     
     def _mostrar_adaptadores_recomendados(self):
         """Muestra adaptadores WiFi recomendados para modo monitor"""
@@ -855,15 +856,15 @@ Necesitas un adaptador USB externo:
                 )
                 for linea in resultado.stdout.split('\n'):
                     if re.match(r'^\d+:', linea):
-                        match = re.search(r'^\d+:\s+(\w+):', linea)
+                        match = re.search(r'^\d+:\s+(\w+)', linea)
                         if match:
                             nombre = match.group(1)
-                            if nombre.startswith('w') or 'wlan' in nombre.lower():
-                                modo = "monitor" if ":MULTICAST" in linea or "UP" in linea else "managed"
+                            if nombre.startswith('w') or 'wlan' in nombre.lower() or nombre.endswith('mon'):
+                                modo_actual = self._obtener_modo_interfaz_linux(nombre)
                                 interfaces.append({
                                     "nombre": nombre,
                                     "tipo": "WiFi",
-                                    "modo": modo
+                                    "modo": modo_actual
                                 })
             except Exception as e:
                 logger.error(f"Error al obtener interfaces Linux: {e}")
@@ -882,10 +883,32 @@ Necesitas un adaptador USB externo:
                         "tipo": "WiFi",
                         "modo": "managed"
                     })
-            except:
-                pass
+            except Exception as e:
+                logger.error(f"Error al obtener interfaces macOS: {e}")
         
         return interfaces
+    
+    def _obtener_modo_interfaz_linux(self, interfaz: str) -> str:
+        """Obtiene el modo actual de una interfaz WiFi en Linux"""
+        try:
+            resultado = subprocess.run(
+                ["iw", interfaz, "info"],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            if resultado.returncode == 0:
+                for linea in resultado.stdout.split('\n'):
+                    if 'type' in linea.lower():
+                        if 'monitor' in linea.lower():
+                            return "monitor"
+                        elif 'managed' in linea.lower() or 'station' in linea.lower():
+                            return "managed"
+                        elif 'ap' in linea.lower() or 'master' in linea.lower():
+                            return "ap"
+        except:
+            pass
+        return "unknown"
     
     def verificar_modo_monitor(self, interfaz: str) -> Dict:
         """Verifica si una interfaz soporta modo monitor y su estado actual"""
@@ -934,16 +957,56 @@ Necesitas un adaptador USB externo:
         
         if self.sistema == "Linux":
             try:
+                interfaz_nueva = None
+                
                 subprocess.run(["ip", "link", "set", interfaz, "down"],
                              capture_output=True, timeout=5)
-                subprocess.run(["iw", interfaz, "set", "type", "monitor"],
-                             capture_output=True, timeout=5)
+                resultado_iw = subprocess.run(["iw", interfaz, "set", "type", "monitor"],
+                             capture_output=True, text=True, timeout=5)
+                
+                if resultado_iw.returncode != 0:
+                    logger.warning(f"iw fallo, intentando con airmon-ng: {resultado_iw.stderr}")
+                    resultado_airmon = subprocess.run(["airmon-ng", "start", interfaz],
+                                        capture_output=True, text=True, timeout=10)
+                    
+                    if resultado_airmon.returncode == 0:
+                        for linea in resultado_airmon.stdout.split('\n'):
+                            if '(mon)' in linea.lower() or 'enabled' in linea.lower():
+                                match = re.search(r'(wlan\d+)', linea)
+                                if match:
+                                    interfaz_nueva = match.group(1)
+                                break
+                        
+                        if not interfaz_nueva:
+                            posibles = [interfaz + "mon", interfaz.replace("mon", "")]
+                            for posible in posibles:
+                                resultado_check = subprocess.run(["ip", "link", "show", posible],
+                                            capture_output=True, timeout=5)
+                                if resultado_check.returncode == 0:
+                                    interfaz_nueva = posible
+                                    break
+                    else:
+                        logger.error(f"airmon-ng fallo: {resultado_airmon.stderr}")
+                        return False
+                else:
+                    resultado_check = subprocess.run(["ip", "link", "show", interfaz],
+                                        capture_output=True, timeout=5)
+                    if resultado_check.returncode == 0:
+                        interfaz_nueva = interfaz
+                
                 subprocess.run(["ip", "link", "set", interfaz, "up"],
                              capture_output=True, timeout=5)
-                logger.info(f"Modo monitor activado en {interfaz}")
+                
+                if interfaz_nueva and interfaz_nueva != interfaz:
+                    print(f"{Colores.VERDE}[OK] Modo monitor activado en {interfaz_nueva}{Colores.RESET}")
+                else:
+                    print(f"{Colores.VERDE}[OK] Modo monitor activado en {interfaz}{Colores.RESET}")
+                
+                logger.info(f"Modo monitor activado en {interfaz_nueva or interfaz}")
                 return True
             except Exception as e:
                 logger.error(f"Error al activar modo monitor: {e}")
+                print(f"{Colores.ROJO}[ERROR] No se pudo activar modo monitor: {e}{Colores.RESET}")
                 return False
         
         elif self.sistema == "Windows":
@@ -988,6 +1051,143 @@ Necesitas un adaptador USB externo:
             print(f"{iface['nombre']:<15} {iface['tipo']:<10} {modo_actual:<15} {soporte}")
         
         return interfaces
+    
+    def desactivar_modo_monitor(self) -> bool:
+        """Desactiva el modo monitor y vuelve a modo managed"""
+        print(f"\n{Colores.AZUL}[DESACTIVAR MODO MONITOR]{Colores.RESET}\n")
+        
+        interfaces = self.obtener_interfaces_wifi()
+        if not interfaces:
+            print(f"{Colores.AMARILLO}No se encontraron interfaces WiFi.{Colores.RESET}")
+            return False
+        
+        interfaces_monitor = []
+        for iface in interfaces:
+            estado = self.verificar_modo_monitor(iface["nombre"])
+            if estado.get("esta_en_modo_monitor"):
+                interfaces_monitor.append(iface["nombre"])
+        
+        if not interfaces_monitor:
+            print(f"{Colores.AMARILLO}No hay interfaces en modo monitor.{Colores.RESET}")
+            return False
+        
+        print(f"{Colores.VERDE}Interfaces en modo monitor:{Colores.RESET}")
+        for i, iface in enumerate(interfaces_monitor, 1):
+            print(f"  {i}. {iface}")
+        
+        print("\nSelecciona interfaz para desactivar: ", end="")
+        try:
+            idx = int(input()) - 1
+            if 0 <= idx < len(interfaces_monitor):
+                interfaz = interfaces_monitor[idx]
+                return self._desactivar_monitor_interface(interfaz)
+        except ValueError:
+            pass
+        
+        return False
+    
+    def _desactivar_monitor_interface(self, interfaz: str) -> bool:
+        """Desactiva el modo monitor en una interfaz especifica"""
+        logger.info(f"Desactivando modo monitor en {interfaz}")
+        
+        if self.sistema == "Linux":
+            try:
+                interfaz_original = self._detectar_interfaz_original(interfaz)
+                
+                subprocess.run(["ip", "link", "set", interfaz, "down"],
+                             capture_output=True, timeout=5)
+                subprocess.run(["iw", interfaz, "set", "type", "managed"],
+                             capture_output=True, timeout=5)
+                subprocess.run(["ip", "link", "set", interfaz, "up"],
+                             capture_output=True, timeout=5)
+                
+                if interfaz_original and interfaz_original != interfaz:
+                    subprocess.run(["ip", "link", "set", interfaz, "name", interfaz_original],
+                                 capture_output=True, timeout=5)
+                    print(f"{Colores.VERDE}[OK] Interfaz renombrada a {interfaz_original} y modo managed activado{Colores.RESET}")
+                else:
+                    print(f"{Colores.VERDE}[OK] Modo monitor desactivado, modo managed activado{Colores.RESET}")
+                
+                logger.info(f"Modo monitor desactivado en {interfaz}")
+                return True
+            except Exception as e:
+                logger.error(f"Error al desactivar modo monitor: {e}")
+                print(f"{Colores.ROJO}[ERROR] No se pudo desactivar modo monitor: {e}{Colores.RESET}")
+                return False
+        
+        elif self.sistema == "Windows":
+            print(f"{Colores.ROJO}Windows no soporta modo monitor de forma nativa.{Colores.RESET}")
+            return False
+        
+        elif self.sistema == "Darwin":
+            try:
+                subprocess.run(["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", "-z"],
+                             capture_output=True, timeout=5)
+                print(f"{Colores.VERDE}[OK] Modo monitor desactivado{Colores.RESET}")
+                return True
+            except Exception as e:
+                logger.error(f"Error al desactivar modo monitor en macOS: {e}")
+                return False
+        
+        return False
+    
+    def _detectar_interfaz_original(self, interfaz: str) -> str:
+        """Detecta el nombre original de la interfaz (ej: wlan0mon -> wlan0)"""
+        if self.sistema != "Linux":
+            return interfaz
+        
+        if interfaz.endswith("mon"):
+            return interfaz[:-3]
+        
+        try:
+            resultado = subprocess.run(
+                ["iw", interfaz, "info"],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            for linea in resultado.stdout.split('\n'):
+                if 'wiphy' in linea.lower():
+                    continue
+        except:
+            pass
+        
+        return interfaz
+    
+    def ver_estado_modo_monitor(self):
+        """Muestra el estado actual de las interfaces en modo monitor"""
+        print(f"\n{Colores.AZUL}[ESTADO DE MODO MONITOR]{Colores.RESET}\n")
+        
+        interfaces = self.obtener_interfaces_wifi()
+        if not interfaces:
+            print(f"{Colores.AMARILLO}No se encontraron interfaces WiFi.{Colores.RESET}")
+            return
+        
+        print(f"{'Interfaz':<15} {'Modo Actual':<15} {'Tipo':<12} {'Soporte'}")
+        print("-" * 60)
+        
+        hay_monitor = False
+        for iface in interfaces:
+            estado = self.verificar_modo_monitor(iface["nombre"])
+            
+            if estado.get("esta_en_modo_monitor"):
+                modo = f"{Colores.VERDE}MONITOR{Colores.RESET}"
+                hay_monitor = True
+            else:
+                modo = f"{iface['modo'].upper()}"
+            
+            soporte = f"{Colores.VERDE}✓{Colores.RESET}" if estado.get("soporta") else f"{Colores.ROJO}✗{Colores.RESET}"
+            
+            print(f"{iface['nombre']:<15} {modo:<15} {iface['tipo']:<12} {soporte}")
+            
+            if estado.get("esta_en_modo_monitor"):
+                print(f"    {Colores.AMARILLO}-> Esta interfaz esta en modo monitor{Colores.RESET}")
+        
+        print()
+        if hay_monitor:
+            print(f"{Colores.VERDE}Para desactivar el modo monitor, usa la opcion 3 del menu.{Colores.RESET}")
+        else:
+            print(f"{Colores.AMARILLO}Ninguna interfaz esta en modo monitor.{Colores.RESET}")
     
     def configurar_alerta_whatsapp(self, telefono: str = None):
         """Configura el numero para alertas WhatsApp"""
@@ -1165,17 +1365,20 @@ Requerimientos:
 Opciones:
 1. Ver interfaces WiFi y compatibilidad
 2. Activar modo monitor en interfaz
-3. Iniciar detector Deauth (10 segundos)
-4. Iniciar detector Deauth (60 segundos)
-5. Configurar WhatsApp para alertas
-6. Ayuda - Ver adaptadores recomendados
-7. Volver al menu principal
+3. Desactivar modo monitor (volver a Managed)
+4. Ver estado de modo monitor
+5. Iniciar detector Deauth (10 segundos)
+6. Iniciar detector Deauth (60 segundos)
+7. Configurar WhatsApp para alertas
+8. Ayuda - Ver adaptadores recomendados
+9. Volver al menu principal
 
 ================================================================================
 Sistema detectado: {}
 ================================================================================
 """.format(self.sistema))
-            opc = input("Selecciona: ")
+            print("Selecciona una opcion (1-9): ", end="")
+            opc = input()
             
             if opc == "1":
                 self.mostrar_interfaces_wifi()
@@ -1186,7 +1389,7 @@ Sistema detectado: {}
                     for i, iface in enumerate(interfaces, 1):
                         print(f"  {i}. {iface['nombre']}")
                     try:
-                        idx = int(input("\nNúmero: ")) - 1
+                        idx = int(input("\nNumero: ")) - 1
                         if 0 <= idx < len(interfaces):
                             interfaz = interfaces[idx]['nombre']
                             print(f"\n{Colores.AMARILLO}Activando modo monitor en {interfaz}...{Colores.RESET}")
@@ -1197,14 +1400,18 @@ Sistema detectado: {}
                     except ValueError:
                         pass
             elif opc == "3":
-                self.detectar_deauth(duracion=10)
+                self.desactivar_modo_monitor()
             elif opc == "4":
-                self.detectar_deauth(duracion=60)
+                self.ver_estado_modo_monitor()
             elif opc == "5":
-                self.configurar_alerta_whatsapp()
+                self.detectar_deauth(duracion=10)
             elif opc == "6":
-                self._mostrar_adaptadores_recomendados()
+                self.detectar_deauth(duracion=60)
             elif opc == "7":
+                self.configurar_alerta_whatsapp()
+            elif opc == "8":
+                self._mostrar_adaptadores_recomendados()
+            elif opc == "9":
                 break
             
             input(f"\n{Colores.AMARILLO}Enter para continuar...{Colores.RESET}")
