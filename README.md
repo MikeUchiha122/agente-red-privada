@@ -106,13 +106,13 @@ python3 -m venv venv
 source venv/bin/activate
 
 # Instalar dependencias
-pip install nmap requests
+pip install python-nmap requests
 ```
 
 **Opción B: Installation directa (Windows, macOS, older Linux)**
 
 ```bash
-pip install nmap requests
+pip install python-nmap requests
 ```
 
 **Para usar detector Deauth (Linux/Raspberry Pi):**
