@@ -133,21 +133,22 @@ ADAPTADORES COMPATIBLES:
     print("""
 CANALES DE ALERTA:
    [OK] Telegram    - Bot API (Gratis - Recomendado)
-   [OK] Discord     - Webhook URL
-   [OK] Email       - SMTP (Gmail, Outlook)
 
 CONFIGURAR TELEGRAM:
    1. Busca @BotFather en Telegram
    2. Envia /newbot y sigue instrucciones
    3. Copia el token
    4. Busca @userinfobot y toma tu Chat ID
-   Linux: export TELEGRAM_BOT_TOKEN='token' TELEGRAM_CHAT_ID='id'
-   Windows: $env:TELEGRAM_BOT_TOKEN="token"
+
+EJECUTAR CON ALERTAS:
+   Linux: python3 agente_red.py -t 'token' -c 'chat_id'
+   sudo python3 agente_red.py -t 'token' -c 'chat_id'  (para modo monitor)
+   Windows: python agente_red.py -t "token" -c "chat_id"
 
 BASE DE DATOS:
    [OK] SQLite - Logging de escaneos y alertas
    [OK] Estadisticas - Historial de amenazas
-    """)
+     """)
     
     # 7. Tecnologías
     print_section("7. TECNOLOGIAS Y HERRAMIENTAS")

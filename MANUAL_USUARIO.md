@@ -197,7 +197,7 @@ Muestra información de tu conexión:
 4. Ver estado de modo monitor            - Muestra estado actual
 5. Iniciar detector Deauth (10s)         - Detecta ataques durante 10 seg
 6. Iniciar detector Deauth (60s)         - Detecta ataques durante 60 seg
-7. Configurar WhatsApp                    - Configura alertas
+7. Configurar alertas (Telegram)         - Configura alertas
 8. Ver adaptadores recomendados          - Lista de hardware compatible
 9. Volver al menú principal
 ```
@@ -241,15 +241,8 @@ Escanea redes WiFi cercanas mostrando:
 
 ---
 
-### 11. Alertas Múltiples
-El sistema puede enviar alertas por múltiples canales:
-
-| Canal | Configuración |
-|-------|----------------|
-| Telegram | Bot Token + Chat ID (RECOMENDADO) |
-| WhatsApp | Twilio o CallMeBot API |
-| Discord | Webhook URL |
-| Email | SMTP (Gmail, Outlook, etc.) |
+### 11. Alertas
+El sistema puede enviar alertas por Telegram:
 
 **Configurar Telegram:**
 
@@ -259,22 +252,20 @@ El sistema puede enviar alertas por múltiples canales:
 4. Busca **@userinfobot** y.enviale un mensaje
 5. Copia tu Chat ID
 
-**Linux/Raspberry Pi:**
+**Ejecutar con argumentos (RECOMENDADO):**
+
+Linux/Raspberry Pi:
 ```bash
-export TELEGRAM_BOT_TOKEN='tu_token'
-export TELEGRAM_CHAT_ID='tu_chat_id'
+# Sin sudo (para probar)
+python3 agente_red.py -t 'tu_token' -c 'tu_chat_id'
+
+# Con sudo (para modo monitor)
+sudo python3 agente_red.py -t 'tu_token' -c 'tu_chat_id'
 ```
 
-**Windows (CMD):**
-```cmd
-set TELEGRAM_BOT_TOKEN=tu_token
-set TELEGRAM_CHAT_ID=tu_chat_id
-```
-
-**Windows (PowerShell):**
+Windows:
 ```powershell
-$env:TELEGRAM_BOT_TOKEN="tu_token"
-$env:TELEGRAM_CHAT_ID="tu_chat_id"
+python agente_red.py -t "tu_token" -c "tu_chat_id"
 ```
 
 ---
