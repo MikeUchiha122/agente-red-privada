@@ -1301,46 +1301,45 @@ Necesitas un adaptador USB externo:
 ================================================================================
               CONFIGURAR ALERTAS
 ================================================================================
-1. Configurar Telegram (Recomendado)
-2. Configurar WhatsApp
-3. Configurar Discord
-4. Configurar Email
-5. Probar alertas
-6. Volver
+1. Configurar Telegram (Gratis - Recomendado)
+2. Configurar Discord
+3. Configurar Email
+4. Probar alertas
+5. Volver
 
 ================================================================================
 """)
-            print("Selecciona una opcion (1-6): ", end="")
+            print("Selecciona una opcion (1-5): ", end="")
             opc = input()
             
             if opc == "1":
                 print("\n[TELEGRAM]")
-                print("Configura estas variables de entorno:")
-                print("  TELEGRAM_BOT_TOKEN: Token del bot (@BotFather)")
-                print("  TELEGRAM_CHAT_ID: Tu Chat ID (@userinfobot)")
-                print("\nO en Linux/Raspberry Pi:")
-                print("  export TELEGRAM_BOT_TOKEN='tu_token'")
-                print("  export TELEGRAM_CHAT_ID='tu_chat_id'")
+                print("PASO 1: Obtener Token")
+                print("  1. Busca @BotFather en Telegram")
+                print("  2. Envia /newbot")
+                print("  3. Dale un nombre (ej: AlertasRed)")
+                print("  4. Copia el token (algo como 1234567890:ABCdef...)")
+                print("\nPASO 2: Obtener Chat ID")
+                print("  1. Busca @userinfobot en Telegram")
+                print("  2. Envia cualquier mensaje")
+                print("  3. Copia tu Chat ID")
+                print("\nCONFIGURAR:")
+                print("  Linux/Raspberry Pi:")
+                print("    export TELEGRAM_BOT_TOKEN='tu_token'")
+                print("    export TELEGRAM_CHAT_ID='tu_chat_id'")
+                print("  Windows (PowerShell):")
+                print("    $env:TELEGRAM_BOT_TOKEN='tu_token'")
+                print("  Ejemplo una linea:")
+                print("    TELEGRAM_BOT_TOKEN='xxx' TELEGRAM_CHAT_ID='xxx' sudo python3 agente_red.py")
                 input("\nEnter para continuar...")
             
             elif opc == "2":
-                print("\n[WHATSAPP]")
-                print("Opcion A - Twilio:")
-                print("  export TWILIO_ACCOUNT_SID='tu_sid'")
-                print("  export TWILIO_AUTH_TOKEN='tu_token'")
-                print("  export TWILIO_WHATSAPP_FROM='whatsapp:+1234567890'")
-                print("\nOpcion B - CallMeBot:")
-                print("  export WHATSAPP_API_KEY='tu_api_key'")
-                print("\nLuego ingresa tu numero:")
-                self.configurar_alerta_whatsapp()
-            
-            elif opc == "3":
                 print("\n[DISCORD]")
                 print("Configura:")
                 print("  export DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/...'")
                 input("\nEnter para continuar...")
             
-            elif opc == "4":
+            elif opc == "3":
                 print("\n[EMAIL]")
                 print("Configura:")
                 print("  export SMTP_SERVER='smtp.gmail.com'")
@@ -1351,13 +1350,12 @@ Necesitas un adaptador USB externo:
                 print("  export TO_EMAIL='destino@email.com'")
                 input("\nEnter para continuar...")
             
-            elif opc == "5":
+            elif opc == "4":
                 print("\n[PROBAR ALERTAS]")
-                print("Enviando mensaje de prueba...")
+                print("Enviando mensaje de prueba a Telegram...")
                 self.enviar_alerta_telegram("Prueba desde Agente de Seguridad Red")
-                self.enviar_alerta_whatsapp("Prueba desde Agente de Seguridad Red")
             
-            elif opc == "6":
+            elif opc == "5":
                 break
     
     def enviar_alerta_whatsapp(self, mensaje: str):
@@ -1497,7 +1495,6 @@ Necesitas un adaptador USB externo:
                     mensaje += f"Red: {self.obtener_ip_local()}\n"
                     mensaje += f"Posible Flipper Zero!"
                     self.enviar_alerta_telegram(mensaje)
-                    self.enviar_alerta_whatsapp(mensaje)
         
         try:
             sniff(iface=interfaz, prn=procesar_paquete, timeout=duracion)
@@ -1520,7 +1517,6 @@ Necesitas un adaptador USB externo:
             mensaje += f"Paquetes: {deauth_count}\n"
             mensaje += f"Dispositivos: {len(dispositivos)}"
             self.enviar_alerta_telegram(mensaje)
-            self.enviar_alerta_whatsapp(mensaje)
         else:
             print("\n[OK] No se detectaron ataques Deauth")
         
@@ -1826,14 +1822,16 @@ Sistema detectado: {}
         return resultado
     
     def enviar_alerta_telegram(self, mensaje: str) -> bool:
-        """Envía alerta por Telegram"""
+        """Envia alerta por Telegram"""
         try:
             import os
             token = os.getenv('TELEGRAM_BOT_TOKEN')
             chat_id = os.getenv('TELEGRAM_CHAT_ID')
             
             if not token or not chat_id:
-                print("[TELEGRAM] No configurado. Variables: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID")
+                print("[TELEGRAM] No configurado.")
+                print("  Linux: export TELEGRAM_BOT_TOKEN='xxx' TELEGRAM_CHAT_ID='xxx'")
+                print("  Windows: $env:TELEGRAM_BOT_TOKEN='xxx'")
                 return False
             
             url = f"https://api.telegram.org/bot{token}/sendMessage"
@@ -1845,6 +1843,8 @@ Sistema detectado: {}
                 return True
             else:
                 print(f"[TELEGRAM] Error: {response.status_code}")
+                if response.status_code == 401:
+                    print("  -> Token o Chat ID incorrecto")
                 return False
         except Exception as e:
             print(f"[TELEGRAM] Error: {e}")
@@ -1913,10 +1913,6 @@ Sistema detectado: {}
     def enviar_alerta_multiple(self, mensaje: str) -> None:
         """Envía alerta a todos los canales configurados"""
         print("\n[ALERTAS] Enviando a todos los canales...")
-        
-        # WhatsApp
-        if hasattr(self, 'telefono_alerta') and self.telefono_alerta:
-            self.enviar_alerta_whatsapp(mensaje)
         
         # Telegram
         self.enviar_alerta_telegram(mensaje)

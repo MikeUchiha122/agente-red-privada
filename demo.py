@@ -129,11 +129,10 @@ ADAPTADORES COMPATIBLES:
     """)
     
     # 6. Sistema de Alertas
-    print_section("6. SISTEMA DE ALERTAS MULTIPLES")
+    print_section("6. SISTEMA DE ALERTAS")
     print("""
 CANALES DE ALERTA:
-   [OK] Telegram    - Bot API (RECOMENDADO - Gratis)
-   [OK] WhatsApp    - Twilio / CallMeBot
+   [OK] Telegram    - Bot API (Gratis - Recomendado)
    [OK] Discord     - Webhook URL
    [OK] Email       - SMTP (Gmail, Outlook)
 
@@ -142,6 +141,8 @@ CONFIGURAR TELEGRAM:
    2. Envia /newbot y sigue instrucciones
    3. Copia el token
    4. Busca @userinfobot y toma tu Chat ID
+   Linux: export TELEGRAM_BOT_TOKEN='token' TELEGRAM_CHAT_ID='id'
+   Windows: $env:TELEGRAM_BOT_TOKEN="token"
 
 BASE DE DATOS:
    [OK] SQLite - Logging de escaneos y alertas
