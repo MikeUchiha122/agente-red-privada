@@ -38,7 +38,12 @@ El **Agente de Seguridad de Red** es una herramienta que te ayuda a:
 ```bash
 sudo apt update
 sudo apt install python3 python3-pip nmap
-pip3 install python-nmap requests
+sudo pip3 install python-nmap requests scapy twilio
+```
+
+**PARA USAR DETECTOR DEAUTH - SE REQUIERE sudo:**
+```bash
+sudo pip3 install python-nmap requests scapy twilio
 ```
 
 ### Ejecutar el programa

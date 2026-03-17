@@ -105,18 +105,20 @@ python3 -m venv venv
 # Activar entorno virtual
 source venv/bin/activate
 
-# Instalar dependencias
+# Instalar dependencias (basico)
 pip install python-nmap requests
 ```
 
-**Opción B: Installation directa (Windows, macOS, older Linux)**
+**Opcion B: Installation directa (Windows, macOS, older Linux)**
 
 ```bash
 pip install python-nmap requests
 ```
 
-**Para usar detector Deauth (Linux/Raspberry Pi):**
+**Opcion C: Para detector Deauth (Linux/Raspberry Pi) - SE REQUIERE sudo:**
 ```bash
+sudo pip install python-nmap requests scapy twilio
+```
 pip install scapy requests twilio
 ```
 
