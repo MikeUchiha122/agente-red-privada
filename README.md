@@ -320,7 +320,7 @@ Crea un plan personalizado para mejorar la seguridad de cada dispositivo.
 ### 6. Detector de Ataques Deauth
 Detecta ataques de desautenticación WiFi (Flipper Zero, ESP32, etc.)
 - Monitoreo continuo de paquetes Deauth
-- Alertas por WhatsApp (Twilio o CallMeBot)
+- Alertas por Telegram
 - Análisis de patrones de ataque
 
 ### 7. Logging y Métricas
@@ -340,9 +340,8 @@ Detecta ataques de desautenticación WiFi (Flipper Zero, ESP32, etc.)
 - Escaneo de redes WiFi (como airodump-ng)
 - Verificación de compatibilidad de tarjetas
 
-### 10. Alertas Múltiples
-- WhatsApp (Twilio/CallMeBot)
-- Telegram
+### 10. Alertas
+- Telegram (Gratis - Recomendado)
 - Discord (Webhook)
 - Email (SMTP)
 - Base de datos SQLite para logging
@@ -455,32 +454,29 @@ export TELEGRAM_BOT_TOKEN='1234567890:ABCdefGHIjklMNOpqrsTUVwxyz'
 export TELEGRAM_CHAT_ID='123456789'
 ```
 
-**Ejecutar con variables (una sola linea):**
+**Ejecutar con argumentos (recomendado):**
 
-Linux/Raspberry Pi:
+Linux/Raspberry Pi (SIN sudo para probar):
 ```bash
-TELEGRAM_BOT_TOKEN='tu_token' TELEGRAM_CHAT_ID='tu_id' sudo python3 agente_red.py
+python3 agente_red.py -t 'tu_token' -c 'tu_chat_id'
+```
+
+Linux/Raspberry Pi (CON sudo para modo monitor):
+```bash
+sudo python3 agente_red.py -t 'tu_token' -c 'tu_chat_id'
 ```
 
 Windows PowerShell:
 ```powershell
-$env:TELEGRAM_BOT_TOKEN="tu_token"; $env:TELEGRAM_CHAT_ID="tu_id"; python agente_red.py
+python agente_red.py -t "tu_token" -c "tu_chat_id"
 ```
 
-#### WhatsApp (Requiere cuenta Twilio o CallMeBot)
-
-**Opcion A - Twilio (Pagado):**
+Tambien puedes usar variables de entorno:
 ```bash
-TWILIO_ACCOUNT_SID=xxx
-TWILIO_AUTH_TOKEN=xxx
-TWILIO_WHATSAPP_FROM=whatsapp:+1234567890
+export TELEGRAM_BOT_TOKEN='tu_token'
+export TELEGRAM_CHAT_ID='tu_id'
+python3 agente_red.py
 ```
-
-**Opcion B - CallMeBot (Gratis con limitaciones):**
-```bash
-WHATSAPP_API_KEY=xxx
-```
-Registrate en https://www.callmebot.com/
 
 #### Discord (Gratis)
 

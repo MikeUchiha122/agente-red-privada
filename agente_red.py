@@ -1324,8 +1324,10 @@ Necesitas un adaptador USB externo:
                 print("\nCONFIGURAR:")
                 print("  Linux: export TELEGRAM_BOT_TOKEN='token' TELEGRAM_CHAT_ID='id'")
                 print("  Windows: $env:TELEGRAM_BOT_TOKEN='token'")
-                print("\nEjecutar con alertas:")
-                print("  TELEGRAM_BOT_TOKEN='xxx' TELEGRAM_CHAT_ID='xxx' python3 agente_red.py")
+                print("\nEjecutar SIN sudo (para probar alertas):")
+                print("  python3 agente_red.py -t 'token' -c 'chat_id'")
+                print("\nEjecutar CON sudo (para modo monitor):")
+                print("  sudo python3 agente_red.py -t 'token' -c 'chat_id'")
                 input("\nEnter para continuar...")
             
             elif opc == "2":
@@ -2052,6 +2054,20 @@ Sistema detectado: {}
             print(f"{Colores.ROJO}Error al obtener estadísticas: {e}{Colores.RESET}")
 
 if __name__ == "__main__":
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Agente de Seguridad de Red')
+    parser.add_argument('--token', '-t', help='Telegram Bot Token')
+    parser.add_argument('--chat', '-c', help='Telegram Chat ID')
+    args, unknown = parser.parse_known_args()
+    
+    if args.token:
+        import os
+        os.environ['TELEGRAM_BOT_TOKEN'] = args.token
+    if args.chat:
+        import os
+        os.environ['TELEGRAM_CHAT_ID'] = args.chat
+    
     try:
         AgenteSeguridadRed().ejecutar()
     except KeyboardInterrupt:
