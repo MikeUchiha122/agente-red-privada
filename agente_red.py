@@ -1301,15 +1301,13 @@ Necesitas un adaptador USB externo:
 ================================================================================
               CONFIGURAR ALERTAS
 ================================================================================
-1. Configurar Telegram (Gratis - Recomendado)
-2. Configurar Discord
-3. Configurar Email
-4. Probar alertas
-5. Volver
+1. Configurar Telegram
+2. Probar alertas
+3. Volver
 
 ================================================================================
 """)
-            print("Selecciona una opcion (1-5): ", end="")
+            print("Selecciona una opcion (1-3): ", end="")
             opc = input()
             
             if opc == "1":
@@ -1318,44 +1316,33 @@ Necesitas un adaptador USB externo:
                 print("  1. Busca @BotFather en Telegram")
                 print("  2. Envia /newbot")
                 print("  3. Dale un nombre (ej: AlertasRed)")
-                print("  4. Copia el token (algo como 1234567890:ABCdef...)")
+                print("  4. Copia el token")
                 print("\nPASO 2: Obtener Chat ID")
                 print("  1. Busca @userinfobot en Telegram")
                 print("  2. Envia cualquier mensaje")
                 print("  3. Copia tu Chat ID")
                 print("\nCONFIGURAR:")
-                print("  Linux/Raspberry Pi:")
-                print("    export TELEGRAM_BOT_TOKEN='tu_token'")
-                print("    export TELEGRAM_CHAT_ID='tu_chat_id'")
-                print("  Windows (PowerShell):")
-                print("    $env:TELEGRAM_BOT_TOKEN='tu_token'")
-                print("  Ejemplo una linea:")
-                print("    TELEGRAM_BOT_TOKEN='xxx' TELEGRAM_CHAT_ID='xxx' sudo python3 agente_red.py")
+                print("  Linux: export TELEGRAM_BOT_TOKEN='token' TELEGRAM_CHAT_ID='id'")
+                print("  Windows: $env:TELEGRAM_BOT_TOKEN='token'")
+                print("\nEjecutar con alertas:")
+                print("  TELEGRAM_BOT_TOKEN='xxx' TELEGRAM_CHAT_ID='xxx' python3 agente_red.py")
                 input("\nEnter para continuar...")
             
             elif opc == "2":
-                print("\n[DISCORD]")
-                print("Configura:")
-                print("  export DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/...'")
-                input("\nEnter para continuar...")
+                print("\n[PROBAR ALERTAS]")
+                token = os.getenv('TELEGRAM_BOT_TOKEN')
+                chat_id = os.getenv('TELEGRAM_CHAT_ID')
+                if not token or not chat_id:
+                    print("[ERROR] Variables no configuradas")
+                    print("  export TELEGRAM_BOT_TOKEN='tu_token'")
+                    print("  export TELEGRAM_CHAT_ID='tu_chat_id'")
+                else:
+                    print(f"Token: {token[:20]}...")
+                    print(f"Chat ID: {chat_id}")
+                    print("Enviando...")
+                    self.enviar_alerta_telegram("Prueba desde Agente de Seguridad Red")
             
             elif opc == "3":
-                print("\n[EMAIL]")
-                print("Configura:")
-                print("  export SMTP_SERVER='smtp.gmail.com'")
-                print("  export SMTP_PORT='587'")
-                print("  export SMTP_USER='tu@email.com'")
-                print("  export SMTP_PASSWORD='tu_password'")
-                print("  export FROM_EMAIL='tu@email.com'")
-                print("  export TO_EMAIL='destino@email.com'")
-                input("\nEnter para continuar...")
-            
-            elif opc == "4":
-                print("\n[PROBAR ALERTAS]")
-                print("Enviando mensaje de prueba a Telegram...")
-                self.enviar_alerta_telegram("Prueba desde Agente de Seguridad Red")
-            
-            elif opc == "5":
                 break
     
     def enviar_alerta_whatsapp(self, mensaje: str):
