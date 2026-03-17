@@ -153,6 +153,25 @@ class AgenteSeguridadRed:
         self.nm = nmap.PortScanner() if NMAP_DISPONIBLE else None
         self.MAX_TRABAJADORES = 50  # Hilos paralelos
         
+        self.PUERTOS_COMUNES = {
+            20: "FTP-DATA", 21: "FTP", 22: "SSH", 23: "Telnet", 25: "SMTP",
+            53: "DNS", 80: "HTTP", 110: "POP3", 143: "IMAP", 443: "HTTPS",
+            445: "SMB", 993: "IMAPS", 995: "POP3S", 3306: "MySQL", 3389: "RDP",
+            5432: "PostgreSQL", 5900: "VNC", 6379: "Redis", 8080: "HTTP-ALT",
+            8443: "HTTPS-ALT", 8888: "HTTP-ALT", 27017: "MongoDB",
+            21: "FTP", 23: "Telnet", 25: "SMTP", 53: "DNS", 67: "DHCP",
+            68: "DHCP", 69: "TFTP", 110: "POP3", 119: "NNTP", 123: "NTP",
+            135: "MSRPC", 137: "NetBIOS-NS", 138: "NetBIOS-DGM", 139: "NetBIOS-SSN",
+            161: "SNMP", 162: "SNMPTRAP", 194: "IRC", 389: "LDAP", 465: "SMTPS",
+            514: "Syslog", 587: "SMTP-SUB", 636: "LDAPS", 993: "IMAPS", 995: "POP3S",
+            1433: "MSSQL", 1521: "Oracle", 1723: "PPTP", 2049: "NFS", 3306: "MySQL",
+            3389: "RDP", 5432: "PostgreSQL", 5900: "VNC", 5901: "VNC-1", 5902: "VNC-2",
+            6379: "Redis", 8080: "HTTP-ALT", 8443: "HTTPS-ALT", 8888: "HTTP-ALT",
+            9000: "SonarQube", 9090: "Prometheus", 9200: "Elasticsearch", 27017: "MongoDB",
+            27018: "MongoDB", 27019: "MongoDB", 3333: "Miner-1", 5555: "Miner-2",
+            7777: "Miner-3", 8888: "Miner-4", 9100: "Printer"
+        }
+        
     def limpiar_pantalla(self):
         os.system('cls' if self.sistema == 'Windows' else 'clear')
     
@@ -326,23 +345,30 @@ class AgenteSeguridadRed:
     def escanear_nmap_rapido(self, ip: str) -> Dict:
         """Escaneo NMAP rapido"""
         try:
-            self.nm.scan(ip, arguments="-sT -T5 -F", timeout=10)
+            self.nm.scan(ip, arguments="-sT -T5 -F -O", timeout=15)
             
             if ip in self.nm.all_hosts():
                 estado = self.nm[ip].state()
                 puertos = []
                 servicios = {}
+                os_info = "Desconocido"
                 
                 if 'tcp' in self.nm[ip]:
                     for puerto, info in self.nm[ip]['tcp'].items():
                         puertos.append(puerto)
                         servicios[puerto] = {"nombre": info.get('name', 'unknown')}
                 
-                return {"ip": ip, "estado": estado, "puertos": puertos, "servicios": servicios}
+                try:
+                    if 'osmatch' in self.nm[ip] and self.nm[ip]['osmatch']:
+                        os_info = self.nm[ip]['osmatch'][0]['name'].split(',')[0]
+                except:
+                    pass
+                
+                return {"ip": ip, "estado": estado, "puertos": puertos, "servicios": servicios, "sistema": os_info}
         except:
             pass
         
-        return {"ip": ip, "estado": "down", "puertos": [], "servicios": {}}
+        return {"ip": ip, "estado": "down", "puertos": [], "servicios": {}, "sistema": "Desconocido"}
     
     def escanear_red_local(self) -> List[Dict]:
         print(f"\n{Colores.AZUL}{Colores.NEGRITA}[BUSCAR] ESCANEANDO TU RED (MODO RAPIDO)...{Colores.RESET}\n")
@@ -388,17 +414,18 @@ class AgenteSeguridadRed:
                         
                         dispositivo_info = self.identificar_dispositivo(mac)
                         amenazas = self.detectar_amenazas(scan.get("puertos", []))
+                        os_detectado = scan.get("sistema", "Desconocido")
                         
                         dispositivo = {
                             "ip": scan["ip"], "mac": mac, "estado": "up",
-                            "sistema": "Desconocido", "puertos": scan.get("puertos", []),
+                            "sistema": os_detectado, "puertos": scan.get("puertos", []),
                             "servicios": scan.get("servicios", {}),
                             "dispositivo": dispositivo_info, "amenazas": amenazas,
                             "fecha": datetime.now().isoformat(),
                             "es_gateway": scan["ip"] == gateway
                         }
                         dispositivos.append(dispositivo)
-                        print(f"  {amenazas['emoji']} {scan['ip']} - {dispositivo_info['marca']}")
+                        print(f"  {amenazas['emoji']} {scan['ip']} - {dispositivo_info['marca']} ({os_detectado})")
                 
                 self.dispositivos_encontrados = dispositivos
                 print(f"\n{Colores.VERDE}[OK] Escaneo completado: {len(dispositivos)} dispositivos{Colores.RESET}")
@@ -517,8 +544,9 @@ class AgenteSeguridadRed:
         for i, disp in enumerate(self.dispositivos_encontrados, 1):
             emoji = disp["amenazas"]["emoji"] if disp["amenazas"]["encontradas"] else "[OK]"
             router = " (ROUTER)" if disp.get("es_gateway") else ""
+            os_info = disp.get("sistema", "Desconocido")
             print(f"{i}. {emoji} {disp['ip']}{router}")
-            print(f"   {disp['dispositivo']['marca']} - {len(disp['puertos'])} puertos\n")
+            print(f"   {disp['dispositivo']['marca']} - OS: {os_info} - {len(disp['puertos'])} puertos\n")
     
     def ver_puertos(self, ip: str = None):
         if not self.dispositivos_encontrados:
@@ -538,7 +566,8 @@ class AgenteSeguridadRed:
         if disp:
             print(f"\n{Colores.AZUL}Puertos en {ip}:{Colores.RESET}")
             for p in disp["puertos"]:
-                print(f"  {p}/tcp")
+                nombre = self.PUERTOS_COMUNES.get(p, "Desconocido")
+                print(f"  {p}/tcp - {nombre}")
     
     def detectar_sospechosos(self):
         if not self.dispositivos_encontrados:
@@ -552,7 +581,8 @@ class AgenteSeguridadRed:
         else:
             print(f"\n{Colores.ROJO}[CUIDADO] {len(sospechosos)} dispositivos con problemas:{Colores.RESET}\n")
             for d in sospechosos:
-                print(f"[PELIGRO] {d['ip']} - {d['dispositivo']['marca']}")
+                os_info = d.get("sistema", "Desconocido")
+                print(f"[PELIGRO] {d['ip']} - {d['dispositivo']['marca']} (OS: {os_info})")
                 for a in d['amenazas']['encontradas']:
                     print(f"   {a['simbolo']} {a['tipo']}: {a['descripcion']}")
                 print()
@@ -1207,7 +1237,7 @@ Necesitas un adaptador USB externo:
         """Configura el numero para alertas WhatsApp"""
         if not telefono:
             print("\n[CONFIGURAR ALERTA WHATSAPP]")
-            print("Numero formato: +525545106780")
+            print("Numero formato: +521234567890")
             telefono = input("Telefono: ").strip()
         
         self.telefono_alerta = telefono
@@ -1240,6 +1270,11 @@ Necesitas un adaptador USB externo:
             print(f"[WHATSAPP] Error: {e}")
         
         try:
+            api_key = os.getenv('WHATSAPP_API_KEY')
+            if not api_key:
+                print("[WHATSAPP] No configurado. Establece la variable WHATSAPP_API_KEY")
+                print("           o usa Twilio con TWILIO_ACCOUNT_SID y TWILIO_AUTH_TOKEN")
+                return False
             api_key = os.getenv('WHATSAPP_API_KEY')
             if api_key:
                 url = "https://api.callmebot.com/whatsapp.php"
@@ -1333,11 +1368,15 @@ Necesitas un adaptador USB externo:
                     mac = "Unknown"
                 
                 if deauth_count == 1:
+                    mac_vendor = self.identificar_dispositivo(mac)
+                    vendor_name = mac_vendor.get('marca', 'Desconocido')
                     print(f"[ALERTA] Paquete Deauth detectado!")
                     print(f"   MAC: {mac}")
+                    print(f"   Fabricante: {vendor_name}")
                     
                     mensaje = f"ALERTA DEAUTH!\n"
                     mensaje += f"Dispositivo: {mac}\n"
+                    mensaje += f"Fabricante: {vendor_name}\n"
                     mensaje += f"Red: {self.obtener_ip_local()}\n"
                     mensaje += f"Posible Flipper Zero!"
                     self.enviar_alerta_whatsapp(mensaje)

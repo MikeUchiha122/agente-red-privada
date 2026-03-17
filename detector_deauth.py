@@ -20,7 +20,7 @@ from typing import Set, Dict, List
 _MAC_VENDOR_CACHE = {}
 
 # Configuracion
-TELEFONO_ALERTA = "+525545106780"  # Tu numero
+TELEFONO_ALERTA = "+521234567890"  # Tu numero
 INTERFAZ = "wlan0"  # Interfaz WiFi en modo monitor
 UMBRAL_DEAUTH = 5  # Paquetes Deauth para considerar ataque
 TIEMPO_ENTRE_ALERTAS = 300  # 5 minutos entre alertas

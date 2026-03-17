@@ -298,8 +298,8 @@ class TestDetectorDeauth(unittest.TestCase):
     def test_configurar_alerta_whatsapp(self):
         from agente_red import AgenteSeguridadRed
         agente = AgenteSeguridadRed()
-        agente.configurar_alerta_whatsapp("+525545106780")
-        self.assertEqual(agente.telefono_alerta, "+525545106780")
+        agente.configurar_alerta_whatsapp("+521234567890")
+        self.assertEqual(agente.telefono_alerta, "+521234567890")
     
     def test_enviar_alerta_whatsapp_sin_configurar(self):
         from agente_red import AgenteSeguridadRed
