@@ -1,139 +1,122 @@
-# Conversación: Agente de Seguridad de Red v3.0
+# Conversación - Agente de Seguridad de Red
 
 ## Resumen del Proyecto
 
-Se creó un agente de seguridad de red llamado **agente-seguridad-red** con las siguientes características:
+**Agente de Seguridad de Red** - Herramienta de análisis y protección de redes locales.
 
-### Funcionalidades implementadas:
-1. ✅ Escaneo de red local
-2. ✅ Escaneo de IP específica
-3. ✅ Escaneo del gateway/router
-4. ✅ Ver dispositivos encontrados
-5. ✅ Ver puertos abiertos
-6. ✅ Detectar dispositivos sospechosos/peligrosos
-7. ✅ Análisis de tráfico de red
-8. ✅ Generar informes detallados (entendibles para niños)
-9. ✅ Ver historial de análisis
-10. ✅ Información del sistema
-11. ✅ Detector de ataques Deauth (para Raspberry Pi)
-
-### Tecnologías usadas:
-- **NMAP** - Para escaneo avanzado de puertos y detección de servicios
-- **Ping** - Método alternativo de detección de dispositivos
-- **Socket TCP** - Escaneo de puertos
-- **ARP** - Obtención de direcciones MAC
-- **Scapy** - Captura de paquetes para detección Deauth
-
-### Base de datos de amenazas:
-- Mineros de criptomonedas
-- Backdoors (puertas traseras)
-- RAT (Acceso Remoto)
-- FTP inseguro
-- Telnet
-- SMB
-- Bases de datos expuestas
-- Servicios web
-- SSH
-- **Ataques Deauth** (detección de dispositivos como Flipper Zero, ESP32, etc.)
-
-### Identificación de dispositivos por MAC:
-- Apple, Samsung, Intel, Dell, HP, ASUS
-- Routers: Cisco, Netgear, TP-Link, Linksys, Tenda
-- Dispositivos IoT: Google, Amazon Echo, Philips Hue
-- Cámaras: AXIS
-- VMs: VMware, VirtualBox, Hyper-V
-- Raspberry Pi
-
-### Instalación realizada:
-1. Se instaló `python-nmap` (librería Python)
-2. Se descargó el instalador de NMAP para Windows
+### Características principales:
+- Escaneo de red local con NMAP
+- Detección de amenazas (mineros, backdoors, RAT, telnet, SMB, FTP, databases)
+- Detector Deauth (Flipper Zero)
+- Alertas por Telegram
+- Identificación de dispositivos por MAC
+- Sistema operativo detectado por NMAP
+- Base de datos SQLite
 
 ---
 
-## Para Desplegar en Raspberry Pi (Kali Linux)
+## Comandos importantes
 
-### Archivos preparados para la Pi:
+### Instalación (Kali Linux / Raspberry Pi)
+```bash
+sudo apt update
+sudo apt install python3 python3-pip nmap
+sudo pip install --break-system-packages python-nmap requests scapy
+```
 
-1. **`detector_deauth.py`** - Script de monitoreo continuo de ataques Deauth
-2. **`detector_deauth.service`** - Servicio systemd para auto-inicio
+### Ejecución
+```bash
+# Con alertas Telegram
+sudo python3 agente_red.py -t 'TOKEN' -c 'CHAT_ID'
 
-### Ubicación del proyecto en Windows:
-`C:\agente-seguridad-red\`
+# O con variables de entorno
+export TELEGRAM_BOT_TOKEN='token'
+export TELEGRAM_CHAT_ID='id'
+sudo python3 agente_red.py
+```
 
-### Archivos creados:
-- `agente_red.py` - Programa principal (Windows)
-- `test_agente_red.py` - Suite de tests (12 tests)
-- `detector_deauth.py` - Detector Deauth para Raspberry Pi
-- `detector_deauth.service` - Servicio systemd
-- `ejecutar.bat` - Lanzador para Windows
+### Menú principal
+1. Escanear red local completa (RÁPIDO)
+2. Escanear IP específica
+3. Ver todos los dispositivos
+4. Ver puertos de un dispositivo
+5. Ver dispositivos con problemas
+6. Generar informe
+7. Ver historial
+8. Info del sistema (IP, red, alertas)
+9. Detector DEAUTH (Flipper Zero)
+10. Salir
+
+### Menú Detector DEAUTH
+1. Ver interfaces WiFi y compatibilidad
+2. Activar modo monitor en interfaz
+3. Desactivar modo monitor (volver a Managed)
+4. Ver estado de modo monitor
+5. Iniciar detector Deauth (10 segundos)
+6. Iniciar detector Deauth (60 segundos)
+7. Configurar alertas (Telegram)
+8. Ver adaptadores recomendados
+9. Volver
+
+---
+
+## Telegram Bot Setup
+
+1. Busca **@BotFather** en Telegram
+2. Envia `/newbot`
+3. Dale un nombre (ej: AlertasSeguridad)
+4. Copia el token
+5. Busca **@userinfobot**
+6. Envia cualquier mensaje
+7. Copia tu Chat ID
+
+**Bot Token:** 8654414868:AAEGc_vGz_a4WsYaWoc32hRwG1uzWxF3alA
+**Chat ID:** 1299293428
+
+---
+
+## Errores comunes y soluciones
+
+| Error | Solución |
+|-------|----------|
+| "externally-managed-environment" | Usar `--break-system-packages` |
+| "Permission denied" para modo monitor | Ejecutar con `sudo` |
+| "No module named 'scapy'" | `sudo pip install --break-system-packages scapy` |
+| Error 401 en Telegram | Token incorrecto - verificar con @BotFather |
+| Error 400 en Telegram | Chat ID incorrecto o bot no iniciado con /start |
+
+---
+
+## Raspberry Pi
+
+- IP: 192.168.0.18
+- VNC: 5901
+- Usuario: mikegalicia
+
+---
+
+## Archivos del proyecto
+
+- `agente_red.py` - Programa principal
+- `detector_deauth.py` - Detector de ataques Deauth
+- `test_agente_red.py` - 44 tests unitarios
 - `README.md` - Documentación principal
-- `README_DEAUTH.md` - Documentación del detector Deauth
-- `requirements.txt` - Dependencias
-- `.gitignore` - Archivos ignorados
+- `MANUAL_USUARIO.md` - Manual de usuario
+- `demo.py` - Demo para portafolio
 - `conversacion.md` - Esta conversación
 
 ---
 
-## Pasos para ejecutar en Raspberry Pi
+## GitHub
 
-### 1. Copiar archivos a la Raspberry Pi:
-```bash
-# Desde tu computadora, copia los archivos:
-scp C:\agente-seguridad-red\detector_deauth.py pi@<IP_RASPBERRY>:~
-scp C:\agente-seguridad-red\detector_deauth.service pi@<IP_RASPBERRY>:~
-scp C:\agente-seguridad-red\requirements.txt pi@<IP_RASPBERRY>:~
-```
-
-### 2. Instalar dependencias en la Raspberry Pi:
-```bash
-ssh pi@<IP_RASPBERRY>
-pip3 install scapy twilio requests
-```
-
-### 3. Configurar tarjeta WiFi en modo monitor:
-```bash
-sudo airmon-ng start wlan0
-```
-
-### 4. Ejecutar el detector:
-```bash
-sudo python3 detector_deauth.py
-```
-
-### 5. Para auto-inicio con systemd:
-```bash
-sudo cp detector_deauth.service /etc/systemd/system/
-sudo systemctl enable detector_deauth
-sudo systemctl start detector_deauth
-```
+Repositorio: https://github.com/MikeUchiha122/agente-red-privada
 
 ---
 
-## Configuración de Alertas WhatsApp
+## Notas
 
-**Número configurado:** +525545106780
-
-### Opción 1: CallMeBot (Gratis)
-- Enviar mensaje al +34 644 92 93 89 con texto "I AGREE"
-- Obtener API key del chat
-
-### Opción 2: Twilio (Pagado)
-- Crear cuenta en twilio.com
-- Obtener SID, Auth Token y número de WhatsApp
-
----
-
-## Notas de la conversación
-
-- El usuario pidió que el informe sea entendible para niños de 5 años
-- Se solicitó basar el proyecto en NMAP
-- Se instalaron las dependencias necesarias
-- El programa funciona con fallback si NMAP no está instalado
-- Se agregó detección de ataques Deauth (NO solo Flipper Zero, cualquier dispositivo)
-- El detector analiza patrones de ataque: ataques dirigidos, ataques masivos, fabricantes afectados
-
----
-
-## Redescubierto en el escaneo:
-- 10 dispositivos encontrados en 192.168.0.x
-- Amenazas potenciales: SMB en 192.168.0.4, posible minero en 192.168.0.5
+- El proyecto funciona en Windows, Linux, macOS y Raspberry Pi
+- Para modo monitor se requiere Linux con permisos root
+- Tarjetas WiFi recomendadas: Alfa AWUS036NHA, TP-Link TL-WN722N
+- Telegram es el canal de alertas recomendado (gratis y rápido)
+- Los argumentos CLI (-t, -c) permiten pasar el token sin sudo
