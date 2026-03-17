@@ -951,11 +951,25 @@ Necesitas un adaptador USB externo:
         
         return resultado
     
+    def _es_root(self) -> bool:
+        """Verifica si el programa se ejecuta con permisos de root"""
+        try:
+            import os
+            return os.geteuid() == 0
+        except:
+            return False
+    
     def activar_modo_monitor(self, interfaz: str) -> bool:
         """Activa el modo monitor en una interfaz WiFi"""
         logger.info(f"Activando modo monitor en {interfaz}")
         
         if self.sistema == "Linux":
+            if not self._es_root():
+                print(f"{Colores.ROJO}[ERROR] Se requieren permisos de root para activar modo monitor{Colores.RESET}")
+                print(f"{Colores.AMARILLO}Ejecuta el programa con sudo:{Colores.RESET}")
+                print(f"  sudo python3 {os.path.basename(__file__)}")
+                return False
+            
             try:
                 interfaz_nueva = None
                 
@@ -1249,6 +1263,13 @@ Necesitas un adaptador USB externo:
         print(f"\n[DETECTOR DEAUTH - FLIPPER ZERO]")
         print(f"Duracion: {duracion} segundos")
         print(f"Numero de alerta: {getattr(self, 'telefono_alerta', 'No configurado')}")
+        
+        if self.sistema == "Linux":
+            if not self._es_root():
+                print(f"\n{Colores.ROJO}[ERROR] Se requieren permisos de root para detectar Deauth{Colores.RESET}")
+                print(f"{Colores.AMARILLO}Ejecuta el programa con sudo:{Colores.RESET}")
+                print(f"  sudo python3 {os.path.basename(__file__)}")
+                return 0
         
         if self.sistema == "Windows":
             print(f"\n{Colores.ROJO}[AVISO] Windows no soporta modo monitor de forma nativa.{Colores.RESET}")
