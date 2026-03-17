@@ -43,7 +43,7 @@ sudo pip3 install python-nmap requests scapy twilio
 
 **PARA USAR DETECTOR DEAUTH - SE REQUIERE sudo:**
 ```bash
-sudo pip3 install python-nmap requests scapy twilio
+sudo pip3 install --break-system-packages python-nmap requests scapy twilio
 ```
 
 ### Ejecutar el programa

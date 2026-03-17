@@ -117,7 +117,7 @@ pip install python-nmap requests
 
 **Opcion C: Para detector Deauth (Linux/Raspberry Pi) - SE REQUIERE sudo:**
 ```bash
-sudo pip install python-nmap requests scapy twilio
+sudo pip install --break-system-packages python-nmap requests scapy twilio
 ```
 pip install scapy requests twilio
 ```
