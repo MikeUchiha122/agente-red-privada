@@ -455,6 +455,18 @@ export TELEGRAM_BOT_TOKEN='1234567890:ABCdefGHIjklMNOpqrsTUVwxyz'
 export TELEGRAM_CHAT_ID='123456789'
 ```
 
+**Ejecutar con variables (una sola linea):**
+
+Linux/Raspberry Pi:
+```bash
+TELEGRAM_BOT_TOKEN='tu_token' TELEGRAM_CHAT_ID='tu_id' sudo python3 agente_red.py
+```
+
+Windows PowerShell:
+```powershell
+$env:TELEGRAM_BOT_TOKEN="tu_token"; $env:TELEGRAM_CHAT_ID="tu_id"; python agente_red.py
+```
+
 #### WhatsApp (Requiere cuenta Twilio o CallMeBot)
 
 **Opcion A - Twilio (Pagado):**
