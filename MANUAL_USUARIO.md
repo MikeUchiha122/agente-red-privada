@@ -188,11 +188,13 @@ Muestra información de tu conexión:
 ```
 1. Ver interfaces WiFi y compatibilidad   - Muestra tarjetas disponibles
 2. Activar modo monitor                  - Activa modo promiscuo (iw/airmon-ng)
-3. Iniciar detector Deauth (10s)         - Detecta ataques durante 10 seg
-4. Iniciar detector Deauth (60s)         - Detecta ataques durante 60 seg
-5. Configurar WhatsApp                    - Configura alertas
-6. Ver adaptadores recomendados          - Lista de hardware compatible
-7. Volver al menú principal
+3. Desactivar modo monitor               - Vuelve a modo Managed
+4. Ver estado de modo monitor            - Muestra estado actual
+5. Iniciar detector Deauth (10s)         - Detecta ataques durante 10 seg
+6. Iniciar detector Deauth (60s)         - Detecta ataques durante 60 seg
+7. Configurar WhatsApp                    - Configura alertas
+8. Ver adaptadores recomendados          - Lista de hardware compatible
+9. Volver al menú principal
 ```
 
 **Tipos de ataques detectados:**
@@ -200,6 +202,11 @@ Muestra información de tu conexión:
 - **Disassoc**: Desasociación de dispositivos
 - **Beacon Flood**: Inundación de paquetes beacon
 - **Probe Flood**: Inundación de probe requests
+
+**Nombres de interfaz en Linux:**
+- Algunos sistemas usan `wlan0mon` (airmon-ng)
+- Otros usan `wlan0` (iw)
+- El programa detecta automáticamente el nombre correcto
 
 **Por qué necesita modo monitor:**
 Las tarjetas WiFi normales solo reciben paquetes dirigidos a ellas. En modo monitor capturan TODOS los paquetes de la red, incluyendo los de desautenticación.
