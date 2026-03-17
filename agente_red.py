@@ -801,6 +801,57 @@ Generado: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         except:
             print(f"{Colores.AMARILLO}Sin historial{Colores.RESET}")
     
+    def mostrar_info_sistema(self):
+        """Muestra informacion detallada del sistema y red"""
+        print(f"\n{Colores.AZUL}[INFO] INFORMACION DEL SISTEMA{Colores.RESET}\n")
+        
+        ip_local = self.obtener_ip_local()
+        gateway = self.obtener_gateway()
+        
+        print(f"{Colores.NEGRITA}Red Local:{Colores.RESET}")
+        print(f"  Tu IP:        {ip_local}")
+        print(f"  Gateway/Router: {gateway}")
+        
+        try:
+            import socket
+            hostname = socket.gethostname()
+            print(f"  Hostname:     {hostname}")
+        except:
+            pass
+        
+        print(f"\n{Colores.NEGRITA}Sistema:{Colores.RESET}")
+        print(f"  OS:           {self.sistema}")
+        print(f"  Python:       {platform.python_version()}")
+        
+        if NMAP_DISPONIBLE:
+            print(f"  NMAP:         {nmap.__version__}")
+        else:
+            print(f"  NMAP:         No instalado")
+        
+        interfaces = self.obtener_interfaces_wifi()
+        if interfaces:
+            print(f"\n{Colores.NEGRITA}Interfaces WiFi:{Colores.RESET}")
+            for iface in interfaces:
+                print(f"  {iface['nombre']}: {iface['modo']} ({iface['tipo']})")
+        
+        print(f"\n{Colores.NEGRITA}Alertas configuradas:{Colores.RESET}")
+        if hasattr(self, 'telefono_alerta') and self.telefono_alerta:
+            print(f"  WhatsApp:     +{'*' * 8}")
+        else:
+            print(f"  WhatsApp:     No configurado")
+        
+        telegram_token = os.getenv('TELEGRAM_BOT_TOKEN')
+        if telegram_token:
+            print(f"  Telegram:     Configurado")
+        else:
+            print(f"  Telegram:     No configurado")
+        
+        discord_webhook = os.getenv('DISCORD_WEBHOOK_URL')
+        if discord_webhook:
+            print(f"  Discord:      Configurado")
+        else:
+            print(f"  Discord:      No configurado")
+    
     def menu_principal(self):
         print("""
 ================================================================================
@@ -813,7 +864,7 @@ Generado: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
  5. Ver dispositivos con problemas
  6. Generar informe
  7. Ver historial
- 8. Info del sistema
+  8. Info del sistema (IP, red, alertas)
  9. Detector DEAUTH (Flipper Zero)
 10. Salir
 ================================================================================
@@ -1241,7 +1292,73 @@ Necesitas un adaptador USB externo:
             telefono = input("Telefono: ").strip()
         
         self.telefono_alerta = telefono
-        print(f"[OK] Alerta configurada: {telefono}")
+        print(f"[OK] Alerta WhatsApp configurada: {telefono}")
+    
+    def configurar_alertas(self):
+        """Menu para configurar alertas"""
+        while True:
+            print("""
+================================================================================
+              CONFIGURAR ALERTAS
+================================================================================
+1. Configurar Telegram (Recomendado)
+2. Configurar WhatsApp
+3. Configurar Discord
+4. Configurar Email
+5. Probar alertas
+6. Volver
+
+================================================================================
+""")
+            print("Selecciona una opcion (1-6): ", end="")
+            opc = input()
+            
+            if opc == "1":
+                print("\n[TELEGRAM]")
+                print("Configura estas variables de entorno:")
+                print("  TELEGRAM_BOT_TOKEN: Token del bot (@BotFather)")
+                print("  TELEGRAM_CHAT_ID: Tu Chat ID (@userinfobot)")
+                print("\nO en Linux/Raspberry Pi:")
+                print("  export TELEGRAM_BOT_TOKEN='tu_token'")
+                print("  export TELEGRAM_CHAT_ID='tu_chat_id'")
+                input("\nEnter para continuar...")
+            
+            elif opc == "2":
+                print("\n[WHATSAPP]")
+                print("Opcion A - Twilio:")
+                print("  export TWILIO_ACCOUNT_SID='tu_sid'")
+                print("  export TWILIO_AUTH_TOKEN='tu_token'")
+                print("  export TWILIO_WHATSAPP_FROM='whatsapp:+1234567890'")
+                print("\nOpcion B - CallMeBot:")
+                print("  export WHATSAPP_API_KEY='tu_api_key'")
+                print("\nLuego ingresa tu numero:")
+                self.configurar_alerta_whatsapp()
+            
+            elif opc == "3":
+                print("\n[DISCORD]")
+                print("Configura:")
+                print("  export DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/...'")
+                input("\nEnter para continuar...")
+            
+            elif opc == "4":
+                print("\n[EMAIL]")
+                print("Configura:")
+                print("  export SMTP_SERVER='smtp.gmail.com'")
+                print("  export SMTP_PORT='587'")
+                print("  export SMTP_USER='tu@email.com'")
+                print("  export SMTP_PASSWORD='tu_password'")
+                print("  export FROM_EMAIL='tu@email.com'")
+                print("  export TO_EMAIL='destino@email.com'")
+                input("\nEnter para continuar...")
+            
+            elif opc == "5":
+                print("\n[PROBAR ALERTAS]")
+                print("Enviando mensaje de prueba...")
+                self.enviar_alerta_telegram("Prueba desde Agente de Seguridad Red")
+                self.enviar_alerta_whatsapp("Prueba desde Agente de Seguridad Red")
+            
+            elif opc == "6":
+                break
     
     def enviar_alerta_whatsapp(self, mensaje: str):
         """Envia alerta por WhatsApp"""
@@ -1379,6 +1496,7 @@ Necesitas un adaptador USB externo:
                     mensaje += f"Fabricante: {vendor_name}\n"
                     mensaje += f"Red: {self.obtener_ip_local()}\n"
                     mensaje += f"Posible Flipper Zero!"
+                    self.enviar_alerta_telegram(mensaje)
                     self.enviar_alerta_whatsapp(mensaje)
         
         try:
@@ -1401,6 +1519,7 @@ Necesitas un adaptador USB externo:
             mensaje = f"RESUMEN DEAUTH\n"
             mensaje += f"Paquetes: {deauth_count}\n"
             mensaje += f"Dispositivos: {len(dispositivos)}"
+            self.enviar_alerta_telegram(mensaje)
             self.enviar_alerta_whatsapp(mensaje)
         else:
             print("\n[OK] No se detectaron ataques Deauth")
@@ -1429,7 +1548,7 @@ Opciones:
 4. Ver estado de modo monitor
 5. Iniciar detector Deauth (10 segundos)
 6. Iniciar detector Deauth (60 segundos)
-7. Configurar WhatsApp para alertas
+7. Configurar alertas (Telegram/WhatsApp)
 8. Ayuda - Ver adaptadores recomendados
 9. Volver al menu principal
 
@@ -1468,7 +1587,7 @@ Sistema detectado: {}
             elif opc == "6":
                 self.detectar_deauth(duracion=60)
             elif opc == "7":
-                self.configurar_alerta_whatsapp()
+                self.configurar_alertas()
             elif opc == "8":
                 self._mostrar_adaptadores_recomendados()
             elif opc == "9":
@@ -1501,7 +1620,7 @@ Sistema detectado: {}
             elif opcion == "7":
                 self.ver_historial()
             elif opcion == "8":
-                print(f"\nIP:{self.obtener_ip_local()} Router:{self.obtener_gateway()}")
+                self.mostrar_info_sistema()
             elif opcion == "9":
                 self.modo_monitor()
             elif opcion == "10":
