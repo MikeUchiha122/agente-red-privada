@@ -45,7 +45,7 @@ def run_demo():
  5. Ver dispositivos con problemas
  6. Generar informe
  7. Ver historial
- 8. Info del sistema
+ 8. Info del sistema (IP, red, alertas)
  9. Detector DEAUTH (Flipper Zero)
 10. Salir
     """)
@@ -132,14 +132,20 @@ ADAPTADORES COMPATIBLES:
     print_section("6. SISTEMA DE ALERTAS MULTIPLES")
     print("""
 CANALES DE ALERTA:
-  [OK] WhatsApp    - Twilio / CallMeBot
-  [OK] Telegram    - Bot API
-  [OK] Discord     - Webhook URL
-  [OK] Email       - SMTP (Gmail, Outlook)
+   [OK] Telegram    - Bot API (RECOMENDADO - Gratis)
+   [OK] WhatsApp    - Twilio / CallMeBot
+   [OK] Discord     - Webhook URL
+   [OK] Email       - SMTP (Gmail, Outlook)
+
+CONFIGURAR TELEGRAM:
+   1. Busca @BotFather en Telegram
+   2. Envia /newbot y sigue instrucciones
+   3. Copia el token
+   4. Busca @userinfobot y toma tu Chat ID
 
 BASE DE DATOS:
-  [OK] SQLite - Logging de escaneos y alertas
-  [OK] Estadisticas - Historial de amenazas
+   [OK] SQLite - Logging de escaneos y alertas
+   [OK] Estadisticas - Historial de amenazas
     """)
     
     # 7. Tecnologías

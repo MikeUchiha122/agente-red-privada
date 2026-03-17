@@ -246,10 +246,36 @@ El sistema puede enviar alertas por múltiples canales:
 
 | Canal | Configuración |
 |-------|----------------|
+| Telegram | Bot Token + Chat ID (RECOMENDADO) |
 | WhatsApp | Twilio o CallMeBot API |
-| Telegram | Bot Token + Chat ID |
 | Discord | Webhook URL |
 | Email | SMTP (Gmail, Outlook, etc.) |
+
+**Configurar Telegram:**
+
+1. Busca **@BotFather** en Telegram
+2. Envia `/newbot` y sigue instrucciones
+3. Copia el token (ej: `1234567890:ABCdef...`)
+4. Busca **@userinfobot** y.enviale un mensaje
+5. Copia tu Chat ID
+
+**Linux/Raspberry Pi:**
+```bash
+export TELEGRAM_BOT_TOKEN='tu_token'
+export TELEGRAM_CHAT_ID='tu_chat_id'
+```
+
+**Windows (CMD):**
+```cmd
+set TELEGRAM_BOT_TOKEN=tu_token
+set TELEGRAM_CHAT_ID=tu_chat_id
+```
+
+**Windows (PowerShell):**
+```powershell
+$env:TELEGRAM_BOT_TOKEN="tu_token"
+$env:TELEGRAM_CHAT_ID="tu_chat_id"
+```
 
 ---
 

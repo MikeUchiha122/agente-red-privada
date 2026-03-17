@@ -96,51 +96,69 @@ cd agente-red-privada
 
 ### Paso 2: Instalar dependencias
 
-**Opción A: Entorno virtual (Recomendado - Kali Linux, Ubuntu 23.04+, etc.)**
+#### Windows
+1. Descarga Python desde: https://www.python.org/downloads/
+2. ⚠️ **Importante:** Marca "Add Python to PATH"
+3. Abre PowerShell o CMD en la carpeta del proyecto
+4. Ejecuta:
+```powershell
+pip install python-nmap requests
+```
 
+#### Linux (Ubuntu, Debian, Kali)
 ```bash
+# Instalacion basica
+sudo apt update
+sudo apt install python3 python3-pip nmap
+
+# Con entorno virtual (recomendado para Kali Linux 2024+)
+python3 -m venv venv
+source venv/bin/activate
+pip install python-nmap requests
+
+# Para detector Deauth (requiere sudo)
+sudo pip install --break-system-packages python-nmap requests scapy
+```
+
+#### macOS
+```bash
+# Con Homebrew
+brew install python3 nmap
+pip3 install python-nmap requests
+```
+
+#### Raspberry Pi (Kali Linux)
+```bash
+# Instalacion completa
+sudo apt update
+sudo apt install python3 python3-pip nmap
+
 # Crear entorno virtual
 python3 -m venv venv
-
-# Activar entorno virtual
 source venv/bin/activate
 
-# Instalar dependencias (basico)
-pip install python-nmap requests
+# Instalar dependencias
+pip install python-nmap requests scapy twilio
+
+# EJECUTAR CON SUDO (para modo monitor)
+sudo python3 agente_red.py
 ```
-
-**Opcion B: Installation directa (Windows, macOS, older Linux)**
-
-```bash
-pip install python-nmap requests
-```
-
-**Opcion C: Para detector Deauth (Linux/Raspberry Pi con Kali Linux) - SE REQUIERE sudo:**
-```bash
-sudo pip install --break-system-packages python-nmap requests scapy twilio
-```
-
-**Nota para Kali Linux 2024+:** Due to PEP 668, you must use `--break-system-packages` or create a virtual environment.
-
-**Nota:** En Kali Linux 2024+ usa la Opción A debido a PEP 668.
 
 ### Paso 3: ¡Listo! Ejecutar el programa
 
-**Con entorno virtual activado (Kali Linux, etc.):**
-```bash
+**Windows:**
+```powershell
 python agente_red.py
 ```
 
-**Sin entorno virtual (Windows, macOS):**
+**Linux/macOS:**
 ```bash
-python agente_red.py
-# o
 python3 agente_red.py
 ```
 
-**Para salir del entorno virtual cuando termines:**
+**Linux/Raspberry Pi (para detector Deauth):**
 ```bash
-deactivate
+sudo python3 agente_red.py
 ```
 
 ---
@@ -396,21 +414,71 @@ El agente guarda:
 
 ### Variables de Entorno para Alertas
 
+**Opciones de configuracion (todas opcionales):**
+
+#### Telegram (RECOMENDADO - Gratis y rapido)
+
+**Paso 1: Obtener Bot Token**
+1. Abre Telegram y busca **@BotFather**
+2. Envia `/newbot`
+3. Sigue las instrucciones y dale un nombre (ej: "AlertasSeguridad")
+4. Te dare un token como: `1234567890:ABCdefGHIjklMNOpqrsTUVwxyz`
+
+**Paso 2: Obtener Chat ID**
+1. Busca **@userinfobot** en Telegram
+2. Envia cualquier mensaje
+3. Te mostrara tu Chat ID (numero largo)
+
+**Configuracion por sistema:**
+
+**Linux/Raspberry Pi:**
 ```bash
-# WhatsApp
+export TELEGRAM_BOT_TOKEN='1234567890:ABCdefGHIjklMNOpqrsTUVwxyz'
+export TELEGRAM_CHAT_ID='123456789'
+```
+
+**Windows (PowerShell):**
+```powershell
+$env:TELEGRAM_BOT_TOKEN="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz"
+$env:TELEGRAM_CHAT_ID="123456789"
+```
+
+**Windows (CMD):**
+```cmd
+set TELEGRAM_BOT_TOKEN=1234567890:ABCdefGHIjklMNOpqrsTUVwxyz
+set TELEGRAM_CHAT_ID=123456789
+```
+
+**macOS:**
+```bash
+export TELEGRAM_BOT_TOKEN='1234567890:ABCdefGHIjklMNOpqrsTUVwxyz'
+export TELEGRAM_CHAT_ID='123456789'
+```
+
+#### WhatsApp (Requiere cuenta Twilio o CallMeBot)
+
+**Opcion A - Twilio (Pagado):**
+```bash
 TWILIO_ACCOUNT_SID=xxx
 TWILIO_AUTH_TOKEN=xxx
-TWILIO_WHATSAPP_FROM=xxx
+TWILIO_WHATSAPP_FROM=whatsapp:+1234567890
+```
+
+**Opcion B - CallMeBot (Gratis con limitaciones):**
+```bash
 WHATSAPP_API_KEY=xxx
+```
+Registrate en https://www.callmebot.com/
 
-# Telegram
-TELEGRAM_BOT_TOKEN=xxx
-TELEGRAM_CHAT_ID=xxx
+#### Discord (Gratis)
 
-# Discord
-DISCORD_WEBHOOK_URL=xxx
+```bash
+DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/xxx/xxx
+```
 
-# Email
+#### Email (SMTP)
+
+```bash
 SMTP_SERVER=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=tu@email.com
@@ -418,6 +486,8 @@ SMTP_PASSWORD=xxx
 FROM_EMAIL=tu@email.com
 TO_EMAIL=destino@email.com
 ```
+
+**Nota:** En Linux puedes guardar las variables en `~/.bashrc` para que se carguen automaticamente.
 
 ### Generación de Informes
 
