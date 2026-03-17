@@ -115,12 +115,12 @@ pip install python-nmap requests
 pip install python-nmap requests
 ```
 
-**Opcion C: Para detector Deauth (Linux/Raspberry Pi) - SE REQUIERE sudo:**
+**Opcion C: Para detector Deauth (Linux/Raspberry Pi con Kali Linux) - SE REQUIERE sudo:**
 ```bash
 sudo pip install --break-system-packages python-nmap requests scapy twilio
 ```
-pip install scapy requests twilio
-```
+
+**Nota para Kali Linux 2024+:** Due to PEP 668, you must use `--break-system-packages` or create a virtual environment.
 
 **Nota:** En Kali Linux 2024+ usa la Opción A debido a PEP 668.
 
@@ -187,6 +187,32 @@ deactivate
 ---
 
 ## 🔧 Solución de Problemas
+
+### Errores Comunes en Kali Linux / Raspberry Pi
+
+**Error: "externally-managed-environment"**
+```
+× This environment is externally managed
+```
+**Solución:** Usa `--break-system-packages`:
+```bash
+sudo pip install --break-system-packages python-nmap requests scapy twilio
+```
+
+**Error: "Could not find a version that satisfies the requirement request"**
+- Causa: Typo - el paquete se llama `requests` (plural), no `request`
+- Solución: `pip install python-nmap requests`
+
+**Error: "Se requieren permisos de root"**
+- Causa: Modo monitor necesita permisos de root
+- Solución: `sudo python3 agente_red.py`
+
+**Error: "No module named 'twilio'"**
+- Solución: `sudo pip install --break-system-packages twilio`
+
+**Error: "command failed: Operation not permitted"**
+- Causa: Sin permisos para cambiar modo de interfaz WiFi
+- Solución: Ejecuta con `sudo`
 
 ### "Python no se reconoce como comando"
 
