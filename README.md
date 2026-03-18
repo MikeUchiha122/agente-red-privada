@@ -21,8 +21,8 @@ Es un **agente de inteligencia artificial** que te ayuda a analizar y proteger t
 | 📱 Ver dispositivos | Muestra IP, nombre y sistema de cada dispositivo |
 | 🔌 Ver puertos | Revisa qué puertos abiertos tiene cada dispositivo |
 | ⚠️ Detectar sospechosos | Identifica dispositivos con riesgos de seguridad |
-| 📊 Analizar tráfico | Muestra las conexiones activas de tu PC |
-| 💡 Generar soluciones | Crea recomendaciones de seguridad personalizadas |
+| 📊 Generar informes | Crea informes detallados con recomendaciones |
+| 📜 Ver historial | Revisa escaneos anteriores |
 
 **Para quién es:** Para principiantes que quieren aprender sobre seguridad de redes y proteger su red doméstica.
 
@@ -115,9 +115,6 @@ sudo apt install python3 python3-pip nmap
 python3 -m venv venv
 source venv/bin/activate
 pip install python-nmap requests
-
-# Para detector Deauth (requiere sudo)
-sudo pip install --break-system-packages python-nmap requests scapy
 ```
 
 #### macOS
@@ -138,9 +135,9 @@ python3 -m venv venv
 source venv/bin/activate
 
 # Instalar dependencias
-pip install python-nmap requests scapy twilio
+pip install python-nmap requests twilio
 
-# EJECUTAR CON SUDO (para modo monitor)
+# EJECUTAR CON SUDO (para funciones avanzadas)
 sudo python3 agente_red.py
 ```
 
@@ -154,11 +151,6 @@ python agente_red.py
 **Linux/macOS:**
 ```bash
 python3 agente_red.py
-```
-
-**Linux/Raspberry Pi (para detector Deauth):**
-```bash
-sudo python3 agente_red.py
 ```
 
 ---
@@ -221,12 +213,8 @@ sudo pip install --break-system-packages python-nmap requests scapy twilio
 - Causa: Typo - el paquete se llama `requests` (plural), no `request`
 - Solución: `pip install python-nmap requests`
 
-**Error: "Se requieren permisos de root"**
-- Causa: Modo monitor necesita permisos de root
-- Solución: `sudo python3 agente_red.py`
-
 **Error: "No module named 'twilio'"**
-- Solución: `sudo pip install --break-system-packages twilio`
+- Solución: `pip install twilio`
 
 **Error: "command failed: Operation not permitted"**
 - Causa: Sin permisos para cambiar modo de interfaz WiFi
@@ -264,6 +252,20 @@ Si ves errores con tildes o caracteres especiales, el programa maneja esto autom
 
 ## 📁 Estructura del Proyecto
 
+```
+agente-red-privada/
+├── agente_red.py           # Programa principal
+├── escanear_rapido.py       # Script de escaneo automático
+├── test_agente_red.py      # Tests unitarios
+├── historial_analisis.json # Historial de escaneos
+├── agente_seguridad.db     # Base de datos SQLite
+├── informe_seguridad.txt   # Informes generados
+├── README.md               # Este archivo
+├── MANUAL_USUARIO.md       # Manual de usuario
+├── GUIA_DESARROLLO.md      # Guía de desarrollo
+├── requirements.txt        # Dependencias
+├── ejecutar.bat            # Lanzador Windows
+└── .gitignore             # Archivos ignorados por Git
 ```
 agente-red-privada/
 ├── agente_red.py           # Programa principal
@@ -317,13 +319,7 @@ Crea un plan personalizado para mejorar la seguridad de cada dispositivo.
 - Consulta automática a **macvendors.com** para dispositivos Unknown
 - Cache para evitar consultas repetidas
 
-### 6. Detector de Ataques Deauth
-Detecta ataques de desautenticación WiFi (Flipper Zero, ESP32, etc.)
-- Monitoreo continuo de paquetes Deauth
-- Alertas por Telegram
-- Análisis de patrones de ataque
-
-### 7. Logging y Métricas
+### 6. Logging y Métricas
 - Registro de todas las operaciones en `agente_seguridad.log`
 - Manejo robusto de errores
 - Fallback automático si NMAP no está disponible
@@ -334,19 +330,18 @@ Detecta ataques de desautenticación WiFi (Flipper Zero, ESP32, etc.)
 - Recomendaciones personalizadas de seguridad
 - Análisis de MAC (fabricante, OUI, causas de Unknown)
 
-### 9. Funciones Avanzadas WiFi (Linux)
+### 8. Funciones Avanzadas WiFi (Linux)
 - Integración con airmon-ng para modo monitor
-- Detección de múltiples ataques: Deauth, Disassoc, Beacon Flood, Probe Flood
-- Escaneo de redes WiFi (como airodump-ng)
-- Verificación de compatibilidad de tarjetas
+- Verificación de compatibilidad de tarjetas WiFi
+- Escaneo de redes WiFi cercanas
 
-### 10. Alertas
+### 9. Alertas
 - Telegram (Gratis - Recomendado)
 - Discord (Webhook)
 - Email (SMTP)
 - Base de datos SQLite para logging
 
-### 11. Estadísticas
+### 10. Estadísticas
 - Historial de escaneos en SQLite
 - Contador de alertas por tipo
 - Dispositivos únicos detectados
@@ -367,8 +362,7 @@ Detecta ataques de desautenticación WiFi (Flipper Zero, ESP32, etc.)
 ║  6. 📊 Generar informe                                     ║
 ║  7. 📜 Ver historial                                       ║
 ║  8. ℹ️  Info del sistema                                    ║
-║  9. 🔐 Detector DEAUTH                                      ║
-║ 10. 🚪 Salir                                               ║
+║  9. 🚪 Salir                                               ║
 ╚══════════════════════════════════════════════════════════╝
 
 Selecciona una opción: 1
@@ -456,14 +450,9 @@ export TELEGRAM_CHAT_ID='123456789'
 
 **Ejecutar con argumentos (recomendado):**
 
-Linux/Raspberry Pi (SIN sudo para probar):
+Linux/Raspberry Pi:
 ```bash
 python3 agente_red.py -t 'tu_token' -c 'tu_chat_id'
-```
-
-Linux/Raspberry Pi (CON sudo para modo monitor):
-```bash
-sudo python3 agente_red.py -t 'tu_token' -c 'tu_chat_id'
 ```
 
 Windows PowerShell:

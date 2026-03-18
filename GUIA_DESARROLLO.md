@@ -55,8 +55,7 @@ El **Agente de Seguridad de Red** es una herramienta de análisis de seguridad d
 
 ```
 agente-red-privada/
-├── agente_red.py           # Programa principal (1250+ líneas)
-├── detector_deauth.py      # Detector de ataques WiFi
+├── agente_red.py           # Programa principal (1200+ líneas)
 ├── escanear_rapido.py      # Script de ejecución automática
 ├── test_agente_red.py      # Suite de pruebas unitarias (44 tests)
 ├── MANUAL_USUARIO.md       # Manual para usuarios finales
@@ -861,7 +860,6 @@ class AgenteSeguridadRed:
 ### 4.2 Archivos de Log
 
 - `agente_seguridad.log` - Log principal de operaciones
-- `/var/log/deteccion_deauth.log` - Log del detector Deauth (Linux)
 
 ---
 
@@ -1020,21 +1018,6 @@ def escanear_wifi_avanzado(self, interfaz: str, duracion: int = 30) -> List[Dict
 
 ---
 
-### 9.3 Detección de Múltiples Ataques
-
-```python
-def detectar_ataques_wifi_avanzados(self, interfaz: str, duracion: int = 30) -> Dict:
-    """Detecta múltiples tipos de ataques WiFi"""
-```
-
-**Ataques detectados**:
-- `deauth`: Paquetes de desautenticación
-- `disassoc`: Paquetes de desasociación
-- `beacon_flood`: Inundación de beacons
-- `probe_flood`: Inundación de probe requests
-
----
-
 ## 10. Sistema de Alertas
 
 ### 10.1 Alertas Múltiples
@@ -1093,7 +1076,6 @@ def ver_estadisticas(self) -> None
 | TestInforme | 1 | Generación de informes |
 | TestInterfacesWiFi | 4 | Interfaces WiFi |
 | TestAnalisisInformes | 11 | Análisis detallado |
-| TestDetectorDeauth | 4 | Detector Deauth |
 | TestFuncionesAvanzadas | 12 | Funciones avanzadas |
 
 ---

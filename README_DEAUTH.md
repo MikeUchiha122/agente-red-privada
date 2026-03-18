@@ -1,4 +1,9 @@
-# Detector Deauth WiFi - Detector de Ataques
+# ⚠️ DETECTOR DEAUTH - TEMPORALMENTE DESHABILITADO
+
+> **Nota:** Esta función está temporalmente deshabilitada en el menú principal.
+> Puedes habilitarla nuevamente después de investigar más sobre los requisitos de modo monitor.
+
+---
 
 ## Detecta ataques de:
 

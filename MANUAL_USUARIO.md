@@ -38,12 +38,7 @@ El **Agente de Seguridad de Red** es una herramienta que te ayuda a:
 ```bash
 sudo apt update
 sudo apt install python3 python3-pip nmap
-sudo pip3 install python-nmap requests scapy twilio
-```
-
-**PARA USAR DETECTOR DEAUTH - SE REQUIERE sudo:**
-```bash
-sudo pip3 install --break-system-packages python-nmap requests scapy twilio
+sudo pip3 install python-nmap requests twilio
 ```
 
 ### Ejecutar el programa
@@ -55,7 +50,7 @@ python agente_red.py
 
 **Linux/Mac:**
 ```bash
-sudo python3 agente_red.py
+python3 agente_red.py
 ```
 
 ---
@@ -76,8 +71,7 @@ Al ejecutar el programa verás este menú:
  6. Generar informe
  7. Ver historial
  8. Info del sistema
- 9. Detector DEAUTH (Flipper Zero)
-10. Salir
+ 9. Salir
 ================================================================================
 ```
 
@@ -180,68 +174,14 @@ Muestra los escaneos anteriores realizados.
 
 ---
 
-### 9. Info del Sistema
+### 8. Info del Sistema
 Muestra información de tu conexión:
 - Tu IP local
 - IP del router/gateway
 
 ---
 
-### 9. Detector DEAUTH (Flipper Zero)
-**Submenú con opciones:**
-
-```
-1. Ver interfaces WiFi y compatibilidad   - Muestra tarjetas disponibles
-2. Activar modo monitor                  - Activa modo promiscuo (iw/airmon-ng)
-3. Desactivar modo monitor               - Vuelve a modo Managed
-4. Ver estado de modo monitor            - Muestra estado actual
-5. Iniciar detector Deauth (10s)         - Detecta ataques durante 10 seg
-6. Iniciar detector Deauth (60s)         - Detecta ataques durante 60 seg
-7. Configurar alertas (Telegram)         - Configura alertas
-8. Ver adaptadores recomendados          - Lista de hardware compatible
-9. Volver al menú principal
-```
-
-**Tipos de ataques detectados:**
-- **Deauth**: Paquetes de desconexión WiFi (Flipper Zero)
-- **Disassoc**: Desasociación de dispositivos
-- **Beacon Flood**: Inundación de paquetes beacon
-- **Probe Flood**: Inundación de probe requests
-
-**Nombres de interfaz en Linux:**
-- Algunos sistemas usan `wlan0mon` (airmon-ng)
-- Otros usan `wlan0` (iw)
-- El programa detecta automáticamente el nombre correcto
-
-**Por qué necesita modo monitor:**
-Las tarjetas WiFi normales solo reciben paquetes dirigidos a ellas. En modo monitor capturan TODOS los paquetes de la red, incluyendo los de desautenticación.
-
-**Compatibilidad por sistema:**
-
-| Sistema | Soporte | Requisitos |
-|---------|---------|------------|
-| Linux | ✓ Completo | Tarjeta con chipset Atheros, airmon-ng |
-| Windows | ✗ No nativo | Adaptador USB externo |
-| Mac | ✓ Limitado | Permisos de root |
-
-**Adaptadores recomendados:**
-- Alfa AWUS036NHA (Atheros) - Mejor opción
-- TP-Link TL-WN722N v2/v3
-- Raspberry Pi con Kali Linux
-
----
-
-### 10. Escaneo WiFi Avanzado
-Escanea redes WiFi cercanas mostrando:
-- SSID (nombre de la red)
-- BSSID (MAC del router)
-- Canal
-- Nivel de señal
-- Tipo de seguridad (WPA2/WEP/Open)
-
----
-
-### 11. Alertas
+### 9. Alertas
 El sistema puede enviar alertas por Telegram:
 
 **Configurar Telegram:**
@@ -256,11 +196,7 @@ El sistema puede enviar alertas por Telegram:
 
 Linux/Raspberry Pi:
 ```bash
-# Sin sudo (para probar)
 python3 agente_red.py -t 'tu_token' -c 'tu_chat_id'
-
-# Con sudo (para modo monitor)
-sudo python3 agente_red.py -t 'tu_token' -c 'tu_chat_id'
 ```
 
 Windows:
