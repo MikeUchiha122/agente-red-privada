@@ -110,17 +110,14 @@ def run_demo():
 FUNCIONES:
   - Verificacion de tarjetas WiFi
   - Activacion de modo monitor (iw/airmon-ng)
-  - Detectar ataques Deauth, Disassoc
   - Detectar Beacon Flood, Probe Flood
   - Integracion con airmon-ng (Linux)
 
 SUBMENU:
  1. Ver interfaces WiFi y compatibilidad
  2. Activar modo monitor en interfaz
- 3. Iniciar detector Deauth (10s)
- 4. Iniciar detector Deauth (60s)
- 5. Configurar WhatsApp para alertas
- 6. Ver adaptadores recomendados
+ 3. Configurar WhatsApp para alertas
+ 4. Ver adaptadores recomendados
 
 ADAPTADORES COMPATIBLES:
   [Linux]   Alfa AWUS036NHA, TP-Link TL-WN722N, Raspberry Pi

@@ -863,13 +863,12 @@ Generado: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
  4. Ver puertos de un dispositivo
  5. Ver dispositivos con problemas
  6. Generar informe
- 7. Ver historial
-  8. Info del sistema (IP, red, alertas)
- 9. Detector DEAUTH (Flipper Zero)
-10. Salir
+  7. Ver historial
+   8. Info del sistema (IP, red, alertas)
+   9. Salir
 ================================================================================
 """)
-        print("Selecciona una opcion (1-10): ", end="")
+        print("Selecciona una opcion (1-9): ", end="")
     
     def _mostrar_adaptadores_recomendados(self):
         """Muestra adaptadores WiFi recomendados para modo monitor"""
@@ -1531,17 +1530,15 @@ Opciones:
 2. Activar modo monitor en interfaz
 3. Desactivar modo monitor (volver a Managed)
 4. Ver estado de modo monitor
-5. Iniciar detector Deauth (10 segundos)
-6. Iniciar detector Deauth (60 segundos)
-7. Configurar alertas (Telegram/WhatsApp)
-8. Ayuda - Ver adaptadores recomendados
-9. Volver al menu principal
+5. Configurar alertas (Telegram/WhatsApp)
+6. Ayuda - Ver adaptadores recomendados
+7. Volver al menu principal
 
 ================================================================================
 Sistema detectado: {}
 ================================================================================
 """.format(self.sistema))
-            print("Selecciona una opcion (1-9): ", end="")
+            print("Selecciona una opcion (1-7): ", end="")
             opc = input()
             
             if opc == "1":
@@ -1568,14 +1565,10 @@ Sistema detectado: {}
             elif opc == "4":
                 self.ver_estado_modo_monitor()
             elif opc == "5":
-                self.detectar_deauth(duracion=10)
-            elif opc == "6":
-                self.detectar_deauth(duracion=60)
-            elif opc == "7":
                 self.configurar_alertas()
-            elif opc == "8":
+            elif opc == "6":
                 self._mostrar_adaptadores_recomendados()
-            elif opc == "9":
+            elif opc == "7":
                 break
             
             input(f"\n{Colores.AMARILLO}Enter para continuar...{Colores.RESET}")
@@ -1607,8 +1600,6 @@ Sistema detectado: {}
             elif opcion == "8":
                 self.mostrar_info_sistema()
             elif opcion == "9":
-                self.modo_monitor()
-            elif opcion == "10":
                 print(f"\n{Colores.VERDE}Gracias!{Colores.RESET}")
                 break
             else:
