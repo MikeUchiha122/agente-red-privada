@@ -1,838 +1,507 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agente de Seguridad de Red - MikeUchiha122</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #0a0e14;
-            --bg-secondary: #1a1f2e;
-            --bg-card: #151b26;
-            --accent-green: #00ff9d;
-            --accent-blue: #00d4ff;
-            --accent-purple: #a855f7;
-            --accent-orange: #ff9f43;
-            --accent-red: #ff4757;
-            --text-primary: #e4e8ed;
-            --text-secondary: #8b95a5;
-            --border: #2a3444;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(180deg, rgba(0,255,157,0.05) 0%, transparent 100%);
-            border-bottom: 1px solid var(--border);
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--accent-green);
-        }
-
-        .logo span {
-            color: var(--text-primary);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-green);
-        }
-
-        /* Hero */
-        .hero {
-            padding: 80px 0;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .hero h1 span {
-            color: var(--accent-green);
-        }
-
-        .hero .tagline {
-            font-size: 1.3rem;
-            color: var(--text-secondary);
-            margin-bottom: 32px;
-        }
-
-        .hero .tagline strong {
-            color: var(--accent-blue);
-        }
-
-        .hero-badges {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            margin-bottom: 48px;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            padding: 12px 24px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .badge-icon {
-            font-size: 1.5rem;
-        }
-
-        .badge-text {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 14px 32px;
-            background: var(--accent-green);
-            color: var(--bg-primary);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0,255,157,0.2);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--accent-green);
-            color: var(--accent-green);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(0,255,157,0.1);
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-        }
-
-        /* Section */
-        section {
-            padding: 64px 0;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .section-title span {
-            color: var(--accent-green);
-        }
-
-        /* Demo */
-        #demo {
-            background: var(--bg-secondary);
-        }
-
-        .demo-container {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .demo-header {
-            background: var(--bg-primary);
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .demo-dots {
-            display: flex;
-            gap: 8px;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .dot.red { background: var(--accent-red); }
-        .dot.yellow { background: var(--accent-orange); }
-        .dot.green { background: var(--accent-green); }
-
-        .demo-title {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .demo-content {
-            padding: 24px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            line-height: 1.8;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .demo-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .demo-content::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-
-        .demo-content::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
-
-        .output-line {
-            margin-bottom: 4px;
-        }
-
-        .output-prompt {
-            color: var(--accent-green);
-        }
-
-        .output-info {
-            color: var(--accent-blue);
-        }
-
-        .output-warning {
-            color: var(--accent-orange);
-        }
-
-        .output-danger {
-            color: var(--accent-red);
-        }
-
-        .output-section {
-            color: var(--accent-purple);
-            margin-top: 16px;
-        }
-
-        /* Herramientas */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .tool-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            transition: border-color 0.2s;
-        }
-
-        .tool-card:hover {
-            border-color: var(--accent-green);
-        }
-
-        .tool-icon {
-            font-size: 2rem;
-            margin-bottom: 16px;
-        }
-
-        .tool-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .tool-desc {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Features */
-        .features-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
-        }
-
-        .feature {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .feature-icon {
-            font-size: 1.5rem;
-        }
-
-        .feature-text {
-            font-size: 0.95rem;
-        }
-
-        /* Tests */
-        #tests {
-            background: var(--bg-secondary);
-        }
-
-        .tests-stats {
-            display: flex;
-            justify-content: center;
-            gap: 48px;
-            margin-bottom: 48px;
-            flex-wrap: wrap;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--accent-green);
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Architecture */
-        .arch-diagram {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 32px;
-            text-align: center;
-        }
-
-        .arch-flow {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .arch-step {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            padding: 16px 24px;
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .arch-step.highlight {
-            border-color: var(--accent-green);
-            color: var(--accent-green);
-        }
-
-        .arch-arrow {
-            color: var(--accent-blue);
-            font-size: 1.5rem;
-        }
-
-        /* About */
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
-            align-items: start;
-        }
-
-        .about-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-        }
-
-        .about-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 16px;
-            color: var(--accent-blue);
-        }
-
-        .tech-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .tech-tag {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border);
-            padding: 32px 0;
-            text-align: center;
-        }
-
-        footer p {
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-            justify-content: center;
-        }
-
-        .footer-links a {
-            color: var(--accent-blue);
-            text-decoration: none;
-        }
-
-        .footer-links a:hover {
-            text-decoration: underline;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .arch-flow {
-                flex-direction: column;
-            }
-            
-            .arch-arrow {
-                transform: rotate(90deg);
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agente Red Privada — MikeUchiha122</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0a0c0f;
+    --bg2:      #0f1318;
+    --bg3:      #141920;
+    --border:   #1e2730;
+    --border2:  #263040;
+    --green:    #00d46a;
+    --green2:   #00a352;
+    --green-dim:#003d20;
+    --red:      #ff4444;
+    --red-dim:  #3d0f0f;
+    --amber:    #ffaa00;
+    --amber-dim:#3d2800;
+    --blue:     #4db8ff;
+    --blue-dim: #0a2a3d;
+    --purple:   #a855f7;
+    --text:     #e8edf2;
+    --text2:    #8899aa;
+    --text3:    #4a5a6a;
+    --mono:     'IBM Plex Mono', monospace;
+    --sans:     'IBM Plex Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 920px; margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,12,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--green); font-weight: 600; letter-spacing: 0.05em; }
+  .nav-logo span { color: var(--text2); }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; color: var(--text2); text-decoration: none; font-family: var(--mono); transition: color .2s; }
+  .nav-links a:hover { color: var(--green); }
+  .nav-status { display: flex; align-items: center; gap: 7px; font-size: 12px; font-family: var(--mono); color: var(--green); }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* HERO */
+  .hero { padding: 100px 0 80px; border-bottom: 1px solid var(--border); }
+  .hero-tag { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--green2); background: var(--green-dim); border: 1px solid var(--green2); padding: 5px 14px; border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 32px; }
+  .hero h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 300; color: var(--text); line-height: 1.15; margin-bottom: 20px; }
+  .hero h1 em { font-style: normal; color: var(--green); font-weight: 500; }
+  .hero-sub { font-size: 16px; color: var(--text2); max-width: 560px; margin-bottom: 40px; line-height: 1.7; }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 60px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 3px; font-size: 13px; font-family: var(--mono); font-weight: 500; cursor: pointer; text-decoration: none; transition: all .2s; border: 1px solid transparent; }
+  .btn-primary { background: var(--green); color: #000; }
+  .btn-primary:hover { background: #00ff80; }
+  .btn-outline { background: transparent; color: var(--green); border-color: var(--green2); }
+  .btn-outline:hover { background: var(--green-dim); }
+  .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .stat { background: var(--bg2); padding: 20px; text-align: center; }
+  .stat-num { font-family: var(--mono); font-size: 28px; font-weight: 600; color: var(--green); display: block; }
+  .stat-label { font-size: 11px; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* SECTIONS */
+  section { padding: 80px 0; border-bottom: 1px solid var(--border); }
+  .sec-header { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+  .sec-num { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+  .sec-title { font-size: 13px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; }
+  .sec-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* DEMO TERMINAL */
+  .terminal-wrapper { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .terminal-header { display: flex; align-items: center; gap: 7px; padding: 12px 16px; background: var(--bg3); border-bottom: 1px solid var(--border); }
+  .t-btn { width: 11px; height: 11px; border-radius: 50%; }
+  .t-r { background: #ff5f57; } .t-y { background: #ffbd2e; } .t-g { background: #28c840; }
+  .terminal-filename { font-family: var(--mono); font-size: 12px; color: var(--text3); margin-left: 8px; }
+  .terminal-body { padding: 20px; font-family: var(--mono); font-size: 13px; min-height: 200px; line-height: 1.8; }
+  .t-line { display: block; }
+  .t-prompt { color: var(--green); }
+  .t-gray { color: var(--text3); }
+  .t-white { color: var(--text); }
+  .t-green { color: var(--green); }
+  .t-red { color: var(--red); }
+  .t-amber { color: var(--amber); }
+  .t-blue { color: var(--blue); }
+  .t-purple { color: var(--purple); }
+
+  .demo-controls { margin-top: 16px; }
+  .demo-input-row { display: flex; gap: 10px; }
+  .demo-input { flex: 1; background: var(--bg2); border: 1px solid var(--border2); border-radius: 3px; padding: 10px 14px; font-family: var(--mono); font-size: 13px; color: var(--text); outline: none; transition: border-color .2s; }
+  .demo-input:focus { border-color: var(--green2); }
+  .demo-input::placeholder { color: var(--text3); }
+  .demo-run { background: var(--green); color: #000; border: none; padding: 10px 20px; border-radius: 3px; font-family: var(--mono); font-size: 13px; font-weight: 600; cursor: pointer; transition: background .2s; white-space: nowrap; }
+  .demo-run:hover { background: #00ff80; }
+  .demo-presets { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+  .preset-label { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+  .preset { font-family: var(--mono); font-size: 11px; padding: 4px 11px; background: transparent; border: 1px solid var(--border2); border-radius: 2px; color: var(--text2); cursor: pointer; transition: all .15s; }
+  .preset:hover { border-color: var(--green2); color: var(--green); background: var(--green-dim); }
+
+  /* RESULT CARD */
+  .result-card { margin-top: 16px; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; display: none; }
+  .result-card.show { display: block; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .result-header { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .result-badge { font-family: var(--mono); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 2px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .badge-danger { background: var(--red-dim); color: var(--red); border: 1px solid var(--red); }
+  .badge-success { background: var(--green-dim); color: var(--green); border: 1px solid var(--green2); }
+  .badge-warning { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber); }
+  .result-title { font-size: 14px; color: var(--text); font-weight: 400; }
+  .result-tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
+  .rtool { background: var(--bg); padding: 14px 16px; }
+  .rtool-name { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
+  .rtool-val { font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--text); }
+  .rtool-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .result-summary { padding: 16px 20px; }
+  .result-summary-label { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .result-summary-text { font-size: 13px; color: var(--text2); line-height: 1.7; }
+
+  /* TOOLS GRID */
+  .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .tool-card { background: var(--bg2); padding: 20px; transition: background .2s; }
+  .tool-card:hover { background: var(--bg3); }
+  .tool-icon { font-size: 20px; margin-bottom: 10px; }
+  .tool-name { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+  .tool-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .tool-free { display: inline-block; margin-top: 8px; font-family: var(--mono); font-size: 10px; color: var(--green2); background: var(--green-dim); padding: 2px 8px; border-radius: 2px; }
+
+  /* ARCH FLOW */
+  .arch-flow { display: flex; align-items: stretch; gap: 0; overflow-x: auto; padding-bottom: 8px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg2); }
+  .arch-step { flex: 1; min-width: 120px; padding: 24px 16px; text-align: center; border-right: 1px solid var(--border); position: relative; }
+  .arch-step:last-child { border-right: none; }
+  .arch-step::after { content: '→'; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); font-family: var(--mono); color: var(--text3); font-size: 14px; z-index: 1; }
+  .arch-step:last-child::after { display: none; }
+  .arch-icon { font-size: 22px; margin-bottom: 10px; }
+  .arch-label { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .arch-sub { font-size: 11px; color: var(--text3); }
+
+  /* FEATURES */
+  .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .feature-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 16px; display: flex; align-items: center; gap: 12px; }
+  .feature-icon { font-size: 18px; }
+  .feature-text { font-size: 13px; color: var(--text2); }
+
+  /* TESTS BARS */
+  .tests-grid { display: flex; flex-direction: column; gap: 10px; }
+  .test-row { display: flex; align-items: center; gap: 12px; }
+  .test-name { font-family: var(--mono); font-size: 12px; color: var(--text2); width: 200px; flex-shrink: 0; }
+  .test-track { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .test-fill { height: 100%; background: var(--green2); border-radius: 2px; transition: width 1s ease; }
+  .test-count { font-family: var(--mono); font-size: 12px; color: var(--green); width: 28px; text-align: right; flex-shrink: 0; }
+  .tests-total { margin-top: 20px; padding: 14px 18px; background: var(--green-dim); border: 1px solid var(--green2); border-radius: 4px; display: flex; align-items: center; justify-content: space-between; }
+  .tests-total-label { font-family: var(--mono); font-size: 13px; color: var(--green); }
+  .tests-total-num { font-family: var(--mono); font-size: 20px; font-weight: 600; color: var(--green); }
+
+  /* ABOUT */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .about-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 24px; }
+  .about-card-title { font-family: var(--mono); font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+  .about-card p { font-size: 13px; color: var(--text2); line-height: 1.7; }
+  .stack-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .stack-tag { font-family: var(--mono); font-size: 11px; padding: 5px 11px; border: 1px solid var(--border2); border-radius: 2px; color: var(--text2); }
+
+  /* FOOTER */
+  footer { padding: 48px 0; }
+  footer .wrap { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-left { font-family: var(--mono); font-size: 12px; color: var(--text3); }
+  .footer-left strong { color: var(--green); font-weight: 500; }
+  .footer-links { display: flex; gap: 16px; }
+  .footer-links a { font-family: var(--mono); font-size: 12px; color: var(--text3); text-decoration: none; transition: color .2s; }
+  .footer-links a:hover { color: var(--green); }
+
+  @media (max-width: 640px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .tools-grid { grid-template-columns: repeat(2, 1fr); }
+    .result-tools { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .arch-flow { flex-direction: column; }
+    .arch-step { border-right: none; border-bottom: 1px solid var(--border); }
+    .arch-step::after { content: '↓'; right: auto; top: auto; bottom: -10px; left: 50%; transform: translateX(-50%); }
+    .features-grid { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">RED<span>SEC</span></div>
-                <ul class="nav-links">
-                    <li><a href="#demo">Demo</a></li>
-                    <li><a href="#herramientas">Herramientas</a></li>
-                    <li><a href="#arquitectura">Arquitectura</a></li>
-                    <li><a href="#tests">Tests</a></li>
-                    <li><a href="#sobre">Sobre</a></li>
-                </ul>
-            </nav>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-logo">MikeUchiha122<span>/agente-red-privada</span></div>
+    <div class="nav-links">
+      <a href="#demo">Demo</a>
+      <a href="#herramientas">Herramientas</a>
+      <a href="#arquitectura">Arquitectura</a>
+      <a href="#tests">Tests</a>
+    </div>
+    <div class="nav-status"><span class="status-dot"></span>44/44 tests</div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="hero-tag">▸ Proyecto de portafolio · 2026</div>
+    <h1>Agente de <em>Seguridad de Red</em><br>con Inteligencia Artificial</h1>
+    <p class="hero-sub">Escanea tu red local, detecta amenazas y protege tus dispositivos. Identifica fabricantes por MAC, detecta mineros y backdoors en tu red.</p>
+    <div class="hero-cta">
+      <a href="https://github.com/MikeUchiha122/agente-red-privada" target="_blank" class="btn btn-primary">Ver código en GitHub</a>
+      <a href="#demo" class="btn btn-outline">Ver demo interactivo</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">6</span><span class="stat-label">Herramientas integradas</span></div>
+      <div class="stat"><span class="stat-num">44</span><span class="stat-label">Tests automatizados</span></div>
+      <div class="stat"><span class="stat-num">1250+</span><span class="stat-label">Líneas de código</span></div>
+      <div class="stat"><span class="stat-num">v3.1</span><span class="stat-label">Versión actual</span></div>
+    </div>
+  </div>
+
+  <section id="demo">
+    <div class="sec-header">
+      <span class="sec-num">01</span>
+      <span class="sec-title">Demo interactivo</span>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="terminal-wrapper">
+      <div class="terminal-header">
+        <span class="t-btn t-r"></span>
+        <span class="t-btn t-y"></span>
+        <span class="t-btn t-g"></span>
+        <span class="terminal-filename">agente_red.py — MikeUchiha122</span>
+      </div>
+      <div class="terminal-body" id="term"></div>
+    </div>
+
+    <div class="demo-controls">
+      <div class="demo-input-row">
+        <input class="demo-input" id="target" placeholder="Ej: 192.168.0.1 o rango: 192.168.0.1/24" />
+        <button class="demo-run" onclick="runDemo()">Escanear</button>
+      </div>
+      <div class="demo-presets">
+        <span class="preset-label">Ejemplos:</span>
+        <button class="preset" onclick="pick('192.168.0.1/24','scan')">Red local /24</button>
+        <button class="preset" onclick="pick('192.168.0.1','single')">IP única</button>
+
+        <button class="preset" onclick="pick('wifi','wifi')">Interfaces WiFi</button>
+      </div>
+    </div>
+
+    <div class="result-card" id="result-card">
+      <div class="result-header">
+        <div class="result-badge" id="rbadge"></div>
+        <div class="result-title" id="rtitle"></div>
+      </div>
+      <div class="result-tools" id="rtools"></div>
+      <div class="result-summary">
+        <div class="result-summary-label">Resumen del análisis</div>
+        <div class="result-summary-text" id="rsummary"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="herramientas">
+    <div class="sec-header">
+      <span class="sec-num">02</span>
+      <span class="sec-title">Herramientas integradas</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card"><div class="tool-icon">🔍</div><div class="tool-name">Escaneo de Red</div><div class="tool-desc">NMAP + Sockets para detectar todos los dispositivos en tu red local con escaneo paralelo.</div><span class="tool-free">NMAP opcional</span></div>
+      <div class="tool-card"><div class="tool-icon">📱</div><div class="tool-name">Identificación MAC</div><div class="tool-desc">Base de datos local + API macvendors.com para identificar fabricantes de dispositivos.</div><span class="tool-free">Sin key</span></div>
+      <div class="tool-card"><div class="tool-icon">⚠️</div><div class="tool-name">Detección de Amenazas</div><div class="tool-desc">Mineros, Backdoors, RAT, Telnet, SMB, FTP, Databases expuestas en tu red.</div><span class="tool-free">Sin key</span></div>
+
+      <div class="tool-card"><div class="tool-icon">💬</div><div class="tool-name">Alertas Múltiples</div><div class="tool-desc">Notificaciones via WhatsApp, Telegram, Discord y Email ante amenazas.</div><span class="tool-free">API keys</span></div>
+      <div class="tool-card"><div class="tool-icon">📊</div><div class="tool-name">Base de Datos</div><div class="tool-desc">SQLite para logging de escaneos, alertas, dispositivos y estadísticas.</div><span class="tool-free">Sin key</span></div>
+      <div class="tool-card"><div class="tool-icon">📄</div><div class="tool-name">Informes Detallados</div><div class="tool-desc">Análisis de MAC, puertos, amenazas,制造商es y recomendaciones de seguridad.</div><span class="tool-free">Sin key</span></div>
+    </div>
+  </section>
+
+  <section id="arquitectura">
+    <div class="sec-header">
+      <span class="sec-num">03</span>
+      <span class="sec-title">Arquitectura del agente</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="arch-flow">
+      <div class="arch-step"><div class="arch-icon">⌨️</div><div class="arch-label">Input</div><div class="arch-sub">IP / Rango CIDR</div></div>
+      <div class="arch-step"><div class="arch-icon">🔍</div><div class="arch-label">Escanea</div><div class="arch-sub">NMAP + Sockets</div></div>
+      <div class="arch-step"><div class="arch-icon">📱</div><div class="arch-label">Identifica</div><div class="arch-sub">MAC + Fabricante</div></div>
+      <div class="arch-step"><div class="arch-icon">⚠️</div><div class="arch-label">Detecta</div><div class="arch-sub">Amenazas/Riesgos</div></div>
+      <div class="arch-step"><div class="arch-icon">📋</div><div class="arch-label">Reporte</div><div class="arch-sub">Informe + Alertas</div></div>
+    </div>
+    
+    <div class="features-grid" style="margin-top: 24px;">
+      <div class="feature-item"><span class="feature-icon">🎯</span><span class="feature-text">Escaneo paralelo con ThreadPoolExecutor</span></div>
+      <div class="feature-item"><span class="feature-icon">🔄</span><span class="feature-text">Fallback automático si NMAP no está</span></div>
+      <div class="feature-item"><span class="feature-icon">💾</span><span class="feature-text">Cache para consultas MAC</span></div>
+      <div class="feature-item"><span class="feature-icon">📝</span><span class="feature-text">Logging estructurado con timestamps</span></div>
+      <div class="feature-item"><span class="feature-icon">🛡️</span><span class="feature-text">Validación de inputs contra injection</span></div>
+      <div class="feature-item"><span class="feature-icon">💾</span><span class="feature-text">Persistencia en SQLite</span></div>
+    </div>
+  </section>
+
+  <section id="tests">
+    <div class="sec-header">
+      <span class="sec-num">04</span>
+      <span class="sec-title">Tests de seguridad</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="tests-grid" id="tests-grid"></div>
+    <div class="tests-total">
+      <span class="tests-total-label">Total — 8 módulos · CI/CD con GitHub Actions</span>
+      <span class="tests-total-num">44 / 44 ✓</span>
+    </div>
+  </section>
+
+  <section id="sobre">
+    <div class="sec-header">
+      <span class="sec-num">05</span>
+      <span class="sec-title">Sobre el proyecto</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="about-card-title">Contexto</div>
+        <p>Proyecto personal desarrollado desde cero para aprender sobre seguridad de redes, programación en Python y construcción de agentes de IA. Compatible con Windows, Linux y macOS.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-title">Stack tecnológico</div>
+        <div class="stack-list">
+          <span class="stack-tag">Python 3.8+</span>
+          <span class="stack-tag">NMAP</span>
+          <span class="stack-tag">Scapy</span>
+          <span class="stack-tag">SQLite</span>
+          <span class="stack-tag">Requests</span>
+          <span class="stack-tag">unittest</span>
+          <span class="stack-tag">macvendors API</span>
+          <span class="stack-tag">Twilio</span>
         </div>
-    </header>
+      </div>
+      <div class="about-card">
+        <div class="about-card-title">Seguridad del código</div>
+        <p>Validación estricta de IPs y rangos CIDR. Sanitización de inputs contra comandos maliciosos. Límites de concurrencia para evitar sobrecarga. Las API keys nunca se exponen en logs.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-title">Autor</div>
+        <p><strong style="color:var(--green)">Miguel Ángel Ramírez Galicia</strong><br>
+        Handle: MikeUchiha122<br>
+        Intereses: Ciberseguridad · Python · AI Agents<br><br>
+        <a href="https://github.com/MikeUchiha122" target="_blank" style="color:var(--blue);font-family:var(--mono);font-size:13px;">github.com/MikeUchiha122</a></p>
+      </div>
+    </div>
+  </section>
 
-    <section class="hero">
-        <div class="container">
-            <h1>Agente de <span>Seguridad de Red</span></h1>
-            <p class="tagline">Escanea tu red local, detecta amenazas y protege tus dispositivos con <strong>Inteligencia Artificial</strong></p>
-            
-            <div class="hero-badges">
-                <div class="badge">
-                    <span class="badge-icon">🔍</span>
-                    <span class="badge-text">NMAP + Sockets</span>
-                </div>
-                <div class="badge">
-                    <span class="badge-icon">📡</span>
-                    <span class="badge-text">Detector Deauth</span>
-                </div>
-                <div class="badge">
-                    <span class="badge-icon">🔐</span>
-                    <span class="badge-text">Modo Monitor</span>
-                </div>
-                <div class="badge">
-                    <span class="badge-icon">📊</span>
-                    <span class="badge-text">SQLite</span>
-                </div>
-            </div>
-            
-            <div class="hero-buttons">
-                <a href="#demo" class="btn">Ver Demo</a>
-                <a href="https://github.com/MikeUchiha122/agente-red-privada" target="_blank" class="btn btn-secondary">Ver Código</a>
-            </div>
-        </div>
-    </section>
+</div>
 
-    <section id="demo">
-        <div class="container">
-            <h2 class="section-title"><span>01</span> Demo Interactivo</h2>
-            
-            <div class="demo-container">
-                <div class="demo-header">
-                    <div class="demo-dots">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                    </div>
-                    <span class="demo-title">agente_red.py — Python</span>
-                </div>
-                <div class="demo-content">
-                    <div class="output-line"><span class="output-prompt">$</span> python agente_red.py</div>
-                    <br>
-                    <div class="output-line output-section">================================================================================</div>
-                    <div class="output-line output-section">  AGENTE DE SEGURIDAD RED v3.1 - Portafolio</div>
-                    <div class="output-line output-section">================================================================================</div>
-                    <br>
-                    <div class="output-line output-info">[INFO] NMAP detectado y disponible</div>
-                    <br>
-                    <div class="output-line"><span class="output-prompt">Selecciona:</span> 1</div>
-                    <br>
-                    <div class="output-line output-section">---- ESCANEANDO RED LOCAL ----</div>
-                    <div class="output-line">Tu IP: 192.168.0.105</div>
-                    <div class="output-line">Tu Router: 192.168.0.1</div>
-                    <div class="output-line">Escaneo rapido con NMAP...</div>
-                    <div class="output-line">Dispositivos encontrados: 9</div>
-                    <br>
-                    <div class="output-line">  [OK] 192.168.0.1 - Commscope (ROUTER)</div>
-                    <div class="output-line">  [OK] 192.168.0.8 - Amazon Technologies</div>
-                    <div class="output-line output-warning">  [CUIDADO] 192.168.0.15 - Private/Unknown [MINERO]</div>
-                    <div class="output-line">  [OK] 192.168.0.16 - Samsung</div>
-                    <div class="output-line">  [OK] 192.168.0.105 - Tu PC</div>
-                    <br>
-                    <div class="output-line output-info">[OK] Escaneo completado: 9 dispositivos</div>
-                    <br>
-                    <div class="output-line"><span class="output-prompt">Selecciona:</span> 6 (Generar informe)</div>
-                    <br>
-                    <div class="output-line output-section">---- INFORME DE SEGURIDAD ----</div>
-                    <div class="output-line">IP: 192.168.0.8</div>
-                    <div class="output-line">Fabricante: Amazon Technologies Inc.</div>
-                    <div class="output-line">Puertos: [8888]</div>
-                    <div class="output-line output-warning">Amenaza: [MINERO] Software de mineria ilegal</div>
-                    <div class="output-line output-danger">Nivel: MEDIO</div>
-                    <br>
-                    <div class="output-line output-section">---- RECOMENDACIONES ----</div>
-                    <div class="output-line output-warning">[ALERTA] Posible mineria de criptomonedas!</div>
-                    <div class="output-line">  * Estos puertos son usados por malware de mineria</div>
-                    <br>
-                    <div class="output-line"><span class="output-prompt">Selecciona:</span> 9 (Detector Deauth)</div>
-                    <br>
-                    <div class="output-line output-section">---- MODO MONITOR ----</div>
-                    <div class="output-line">Sistema detectado: Linux</div>
-                    <br>
-                    <div class="output-line">Interfaces WiFi:</div>
-                    <div class="output-line">  wlan0 - Modo: managed</div>
-                    <div class="output-line output-info">[INFO]Activar modo monitor para detectar ataques Deauth</div>
-                </div>
-            </div>
-        </div>
-    </section>
+<footer>
+  <div class="wrap">
+    <div class="footer-left">
+      <strong>MikeUchiha122</strong> · Miguel Ángel Ramírez Galicia · 2026
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/MikeUchiha122/agente-red-privada" target="_blank">GitHub</a>
+      <a href="https://github.com/MikeUchiha122/agente-red-privada/blob/main/README.md" target="_blank">README</a>
+    </div>
+  </div>
+</footer>
 
-    <section id="herramientas">
-        <div class="container">
-            <h2 class="section-title"><span>02</span> Herramientas Integradas</h2>
-            
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <div class="tool-icon">🔍</div>
-                    <div class="tool-name">Escaneo de Red</div>
-                    <div class="tool-desc">NMAP + Sockets para detectar todos los dispositivos en tu red local</div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon">📱</div>
-                    <div class="tool-name">Identificación MAC</div>
-                    <div class="tool-desc">Base de datos local + API macvendors.com para identificar fabricantes</div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon">⚠️</div>
-                    <div class="tool-name">Detección de Amenazas</div>
-                    <div class="tool-desc">Mineros, Backdoors, RAT, Telnet, SMB, FTP, Databases expuestas</div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon">📡</div>
-                    <div class="tool-name">Detector Deauth</div>
-                    <div class="tool-desc">Detecta ataques Flipper Zero, Beacon Flood, Probe Flood</div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon">🔐</div>
-                    <div class="tool-name">Modo Monitor</div>
-                    <div class="tool-desc">Integración con airmon-ng y verificación de tarjetas WiFi</div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon">💬</div>
-                    <div class="tool-name">Alertas Múltiples</div>
-                    <div class="tool-desc">WhatsApp, Telegram, Discord, Email</div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon">📊</div>
-                    <div class="tool-name">Base de Datos</div>
-                    <div class="tool-desc">SQLite para logging de escaneos, alertas y estadísticas</div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-icon">📄</div>
-                    <div class="tool-name">Informes Detallados</div>
-                    <div class="tool-desc">Análisis de MAC, puertos, amenazas y recomendaciones</div>
-                </div>
-            </div>
-        </div>
-    </section>
+<script>
+const SCENARIOS = {
+  scan: {
+    steps: ['$ python agente_red.py','> Modo: ESCANEO DE RED','🌐 Red detectada: 192.168.0.0/24','🔍 Iniciando escaneo con NMAP...','   → 9 dispositivos encontrados','📱 Identificando fabricantes...','   → Commscope, Amazon, Samsung, Intel...','⚠️  Detectando amenazas...','   → ALERTA: 192.168.0.15 [MINERO]','🧠 Generando reporte...'],
+    sc: ['t-prompt','t-blue','t-gray','t-gray','t-green','t-gray','t-green','t-gray','t-amber','t-green'],
+    verdict: 'warning', vtext: 'ALERTA',
+    title: '1 amenaza detectada en la red',
+    tools: [['Dispositivos','9','encontrados'],['Amenazas','1','detectada'],['Fabricantes','5','identificados']],
+    summary: 'Se encontraron 9 dispositivos en tu red. Se detectó 1 dispositivo sospechoso (posible minero) en 192.168.0.15. Revisa la MAC y los puertos abiertos.'
+  },
+  single: {
+    steps: ['$ python agente_red.py','> Modo: ESCANEO IP ÚNICA','🎯 Objetivo: 192.168.0.1','🔍 Escaneando puertos comunes...','   → 3 puertos abiertos: 80, 443, 53','📱 MAC: AA:BB:CC:DD:EE:FF','   → Fabricante: Commscope (ROUTER)','⚠️  Verificando amenazas...','   → Router estándar - Sin alertas','📋 Generando informe...'],
+    sc: ['t-prompt','t-blue','t-gray','t-gray','t-green','t-gray','t-green','t-gray','t-green','t-green'],
+    verdict: 'success', vtext: 'SEGURO',
+    title: 'Router estándar sin amenazas',
+    tools: [['Puertos','3','abiertos'],['MAC','Commscope','verificado'],['Riesgo','BAJO','sin alertas']],
+    summary: '192.168.0.1 es tu router estándar (Commscope). Puertos típicos abiertos: 80 (HTTP), 443 (HTTPS), 53 (DNS). Sin amenazas detectadas.'
+  },
+  wifi: {
+    steps: ['$ python agente_red.py','> Modo: INFO WIFI','📡 Listando interfaces WiFi...','   → wlan0: Realtek RTL8821CE','🔐 Verificando modo monitor...','   → Soportado: SÍ','⚙️ Modo actual: managed','💡 Recomendación:','   → sudo airmon-ng start wlan0','📋 Interfaz monitor: wlan0mon'],
+    sc: ['t-prompt','t-blue','t-gray','t-green','t-gray','t-green','t-gray','t-amber','t-blue','t-green'],
+    verdict: 'success', vtext: 'OK',
+    title: 'WiFi listo para monitoreo',
+    tools: [['Interface','wlan0','Realtek RTL8821CE'],['Monitor','Soportado','compatible'],['Driver','OK','rtl8xxxu']],
+    summary: 'Tu tarjeta WiFi (Realtek RTL8821CE) soporta modo monitor. Para activar: sudo airmon-ng start wlan0. Luego puedes usar herramientas de análisis WiFi.'
+  }
+};
 
-    <section id="arquitectura">
-        <div class="container">
-            <h2 class="section-title"><span>03</span> Arquitectura</h2>
-            
-            <div class="arch-diagram">
-                <div class="arch-flow">
-                    <div class="arch-step">Input</div>
-                    <span class="arch-arrow">→</span>
-                    <div class="arch-step highlight">Agente</div>
-                    <span class="arch-arrow">→</span>
-                    <div class="arch-step">Escaneo</div>
-                    <span class="arch-arrow">→</span>
-                    <div class="arch-step">Análisis</div>
-                    <span class="arch-arrow">→</span>
-                    <div class="arch-step">Reporte</div>
-                </div>
-            </div>
-            
-            <div class="features-list" style="margin-top: 32px;">
-                <div class="feature">
-                    <span class="feature-icon">🎯</span>
-                    <span class="feature-text">Escaneo paralelo con ThreadPoolExecutor</span>
-                </div>
-                <div class="feature">
-                    <span class="feature-icon">🔄</span>
-                    <span class="feature-text">Fallback automático si NMAP no está</span>
-                </div>
-                <div class="feature">
-                    <span class="feature-icon">💾</span>
-                    <span class="feature-text">Cache para consultas MAC</span>
-                </div>
-                <div class="feature">
-                    <span class="feature-icon">📝</span>
-                    <span class="feature-text">Logging estructurado</span>
-                </div>
-            </div>
-        </div>
-    </section>
+const TESTS_DATA = [
+  ['Validación de IPs',8],
+  ['Validación CIDR',5],
+  ['Identificación MAC',6],
+  ['Detección amenazas',5],
+  ['Generación informes',4],
+  ['Interfaces WiFi',4],
+  ['Base de datos',6],
+  ['Reportes e historial',6]
+];
 
-    <section id="tests">
-        <div class="container">
-            <h2 class="section-title"><span>04</span> Tests de Calidad</h2>
-            
-            <div class="tests-stats">
-                <div class="stat">
-                    <div class="stat-value">44</div>
-                    <div class="stat-label">Tests automatizados</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">100%</div>
-                    <div class="stat-label">Pasando</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">1250+</div>
-                    <div class="stat-label">Líneas de código</div>
-                </div>
-            </div>
-            
-            <div class="features-list">
-                <div class="feature">
-                    <span class="feature-icon">✓</span>
-                    <span class="feature-text">Validación de IPs</span>
-                </div>
-                <div class="feature">
-                    <span class="feature-icon">✓</span>
-                    <span class="feature-text">Identificación de dispositivos</span>
-                </div>
-                <div class="feature">
-                    <span class="feature-icon">✓</span>
-                    <span class="feature-text">Detección de amenazas</span>
-                </div>
-                <div class="feature">
-                    <span class="feature-icon">✓</span>
-                    <span class="feature-text">Generación de informes</span>
-                </div>
-                <div class="feature">
-                    <span class="feature-icon">✓</span>
-                    <span class="feature-text">Interfaces WiFi</span>
-                </div>
-                <div class="feature">
-                    <span class="feature-icon">✓</span>
-                    <span class="feature-text">Detector Deauth</span>
-                </div>
-                <div class="feature">
-                    <span class="feature-icon">✓</span>
-                    <span class="feature-text">Alertas múltiples</span>
-                </div>
-                <div class="feature">
-                    <span class="feature-icon">✓</span>
-                    <span class="feature-text">Base de datos SQLite</span>
-                </div>
-            </div>
-        </div>
-    </section>
+let curType = 'scan', running = false;
 
-    <section id="sobre">
-        <div class="container">
-            <h2 class="section-title"><span>05</span> Sobre el Proyecto</h2>
-            
-            <div class="about-content">
-                <div class="about-card">
-                    <h3>📋 Contexto</h3>
-                    <p style="color: var(--text-secondary); margin-bottom: 16px;">
-                        Proyecto personal desarrollado desde cero para aprender sobre seguridad de redes, 
-                        programación en Python y construcción de agentes de IA. Incluye validación de 
-                        entradas, manejo de errores robusto y tests automatizados.
-                    </p>
-                    <p style="color: var(--text-secondary);">
-                        Compatible con Windows, Linux y macOS. El detector Deauth funciona en Linux 
-                        con tarjeta WiFi en modo monitor.
-                    </p>
-                </div>
-                
-                <div class="about-card">
-                    <h3>🛠️ Stack Tecnológico</h3>
-                    <div class="tech-list">
-                        <span class="tech-tag">Python 3.8+</span>
-                        <span class="tech-tag">NMAP</span>
-                        <span class="tech-tag">Scapy</span>
-                        <span class="tech-tag">SQLite</span>
-                        <span class="tech-tag">Requests</span>
-                        <span class="tech-tag">unittest</span>
-                        <span class="tech-tag">macvendors API</span>
-                        <span class="tech-tag">Twilio</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+function pick(v, t) {
+  document.getElementById('target').value = v;
+  curType = t;
+}
 
-    <footer>
-        <div class="container">
-            <p>Proyecto de portafolio · Miguel Ángel Ramírez Galicia · 2026</p>
-            <div class="footer-links">
-                <a href="https://github.com/MikeUchiha122/agente-red-privada">GitHub</a>
-                <a href="https://github.com/MikeUchiha122/agente-red-privada/blob/main/README.md">README</a>
-                <a href="https://github.com/MikeUchiha122/agente-red-privada/tree/main">Código</a>
-            </div>
-        </div>
-    </footer>
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-    <script>
-        // Demo automático
-        const demoContent = document.querySelector('.demo-content');
-        
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+async function runDemo() {
+  if (running) return;
+  running = true;
+  const inputVal = document.getElementById('target').value.trim();
+  if (!inputVal) { running = false; return; }
+  const type = curType;
+  const s = SCENARIOS[type] || SCENARIOS.scan;
+  const term = document.getElementById('term');
+  const rc = document.getElementById('result-card');
+  rc.classList.remove('show');
+  term.innerHTML = '';
 
-        // Contador animado
-        const observerOptions = {
-            threshold: 0.5
-        };
+  for (let i = 0; i < s.steps.length; i++) {
+    await sleep(i === 0 ? 100 : 480);
+    const sp = document.createElement('span');
+    sp.className = 't-line ' + s.sc[i];
+    sp.textContent = s.steps[i];
+    term.appendChild(sp);
+    term.scrollTop = term.scrollHeight;
+  }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const statValues = entry.target.querySelectorAll('.stat-value');
-                    statValues.forEach(stat => {
-                        const finalValue = stat.textContent;
-                        if (!isNaN(parseInt(finalValue))) {
-                            let current = 0;
-                            const increment = parseInt(finalValue) / 30;
-                            const interval = setInterval(() => {
-                                current += increment;
-                                if (current >= parseInt(finalValue)) {
-                                    current = parseInt(finalValue);
-                                    clearInterval(interval);
-                                }
-                                stat.textContent = Math.floor(current);
-                            }, 30);
-                        }
-                    });
-                }
-            });
-        }, observerOptions);
+  await sleep(500);
+  const sp = document.createElement('span');
+  sp.className = 't-line t-green';
+  sp.textContent = '════ ESCANEO COMPLETO ════';
+  term.appendChild(sp);
 
-        document.querySelectorAll('.stat').forEach(stat => {
-            observer.observe(stat);
-        });
-    </script>
+  const badgeClass = { danger: 'badge-danger', success: 'badge-success', warning: 'badge-warning' }[s.verdict];
+  document.getElementById('rbadge').className = 'result-badge ' + badgeClass;
+  document.getElementById('rbadge').textContent = s.vtext;
+  document.getElementById('rtitle').textContent = s.title;
+  document.getElementById('rtools').innerHTML = s.tools.map(([n,v,sub]) =>
+    `<div class="rtool"><div class="rtool-name">${n}</div><div class="rtool-val">${v}</div><div class="rtool-sub">${sub}</div></div>`
+  ).join('');
+  document.getElementById('rsummary').textContent = s.summary;
+  rc.classList.add('show');
+  running = false;
+}
+
+function renderTests() {
+  const el = document.getElementById('tests-grid');
+  el.innerHTML = TESTS_DATA.map(([name, count]) => `
+    <div class="test-row">
+      <span class="test-name">${name}</span>
+      <div class="test-track"><div class="test-fill" style="width:${Math.round(count/8*100)}%"></div></div>
+      <span class="test-count">${count}</span>
+    </div>
+  `).join('');
+}
+
+document.getElementById('target').addEventListener('keydown', e => { if (e.key === 'Enter') runDemo(); });
+
+renderTests();
+const term = document.getElementById('term');
+term.innerHTML = '<span class="t-line t-gray">Agente Red Privada v3.1 — MikeUchiha122</span><span class="t-line t-gray">Selecciona un ejemplo o ingresa una IP/rango CIDR.</span>';
+</script>
 </body>
 </html>

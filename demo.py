@@ -104,29 +104,8 @@ def run_demo():
     
     print(agente.generar_informe(dispositivo))
     
-    # 5. Modo Monitor
-    print_section("5. DETECTOR DEAUTH Y MODO MONITOR")
-    print("""
-FUNCIONES:
-  - Verificacion de tarjetas WiFi
-  - Activacion de modo monitor (iw/airmon-ng)
-  - Detectar Beacon Flood, Probe Flood
-  - Integracion con airmon-ng (Linux)
-
-SUBMENU:
- 1. Ver interfaces WiFi y compatibilidad
- 2. Activar modo monitor en interfaz
- 3. Configurar WhatsApp para alertas
- 4. Ver adaptadores recomendados
-
-ADAPTADORES COMPATIBLES:
-  [Linux]   Alfa AWUS036NHA, TP-Link TL-WN722N, Raspberry Pi
-  [Windows] Adaptador USB externo (no nativo)
-  [Mac]     Tarjetas internas (limitado)
-    """)
-    
-    # 6. Sistema de Alertas
-    print_section("6. SISTEMA DE ALERTAS")
+    # 5. Sistema de Alertas
+    print_section("5. SISTEMA DE ALERTAS")
     print("""
 CANALES DE ALERTA:
    [OK] Telegram    - Bot API (Gratis - Recomendado)
@@ -139,7 +118,6 @@ CONFIGURAR TELEGRAM:
 
 EJECUTAR CON ALERTAS:
    Linux: python3 agente_red.py -t 'token' -c 'chat_id'
-   sudo python3 agente_red.py -t 'token' -c 'chat_id'  (para modo monitor)
    Windows: python agente_red.py -t "token" -c "chat_id"
 
 BASE DE DATOS:
