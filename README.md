@@ -324,24 +324,19 @@ Crea un plan personalizado para mejorar la seguridad de cada dispositivo.
 - Manejo robusto de errores
 - Fallback automático si NMAP no está disponible
 
-### 8. Informes Detallados
+### 7. Informes Detallados
 - Análisis completo de cada dispositivo
 - Explicación de puertos abiertos y servicios
 - Recomendaciones personalizadas de seguridad
 - Análisis de MAC (fabricante, OUI, causas de Unknown)
 
-### 8. Funciones Avanzadas WiFi (Linux)
-- Integración con airmon-ng para modo monitor
-- Verificación de compatibilidad de tarjetas WiFi
-- Escaneo de redes WiFi cercanas
-
-### 9. Alertas
+### 8. Alertas
 - Telegram (Gratis - Recomendado)
 - Discord (Webhook)
 - Email (SMTP)
 - Base de datos SQLite para logging
 
-### 10. Estadísticas
+### 9. Estadísticas
 - Historial de escaneos en SQLite
 - Contador de alertas por tipo
 - Dispositivos únicos detectados
